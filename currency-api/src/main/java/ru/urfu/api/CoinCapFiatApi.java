@@ -16,15 +16,7 @@ public class CoinCapFiatApi implements CurrencyApi {
     private final JsonParser jsonParser;
 
     private final Map<String, String> currencyPathMap = new LinkedHashMap<>() {{
-        put("Belarusian ruble", "data.25.rateUsd");
-        put("Egyptian pound", "data.36.rateUsd");
-        put("Turkish lira", "data.37.rateUsd");
-        put("Kazakhstani tenge", "data.38.rateUsd");
-        put("Russian ruble", "data.96.rateUsd");
-        put("Euro", "data.131.rateUsd");
-        put("Japanese yen", "data.132.rateUsd");
-        put("Indian rupee", "data.141.rateUsd");
-        put("Mexican peso", "data.146.rateUsd");
+        put("Belarusian ruble", "data.63.rateUsd");
     }};
 
     private final Duration updateDuration = Duration.ofDays(1);
