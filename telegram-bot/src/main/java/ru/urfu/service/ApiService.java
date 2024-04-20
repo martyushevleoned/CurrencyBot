@@ -2,13 +2,13 @@ package ru.urfu.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.ApiManager;
 import ru.urfu.model.CurrencyRequest;
 import ru.urfu.model.CurrencyResponse;
+import ru.urfu.utils.DataConverter;
 
-import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Класс для взаимодействия с модулем currency-api
@@ -19,16 +19,13 @@ public class ApiService {
     private final ApiManager apiManager = new ApiManager();
 
     @Autowired
-    private DataConverterService dataConverter;
+    private DataConverter dataConverter;
 
     /**
-     * Возвращает все доступные запросы к API в видде списка кнопок
+     * Возвращает все доступные запросы к API
      */
-    public List<InlineKeyboardButton> getRequestButtons() {
-        return apiManager.getPossibleRequests().stream()
-                .map(dataConverter::requestToInlineKeyboardButton)
-                .sorted(Comparator.comparing(InlineKeyboardButton::getText))
-                .toList();
+    public Set<CurrencyRequest> getPossibleRequests() {
+        return apiManager.getPossibleRequests();
     }
 
     /**

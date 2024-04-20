@@ -1,5 +1,6 @@
-package ru.urfu.service;
+package ru.urfu.utils;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.urfu.model.CurrencyRequest;
 import ru.urfu.model.CurrencyResponse;
@@ -10,8 +11,8 @@ import java.util.Date;
 /**
  * Класс для форматирования информации для меню с аналогичным текстом
  */
-@Service
-public class TextFormaterService {
+@Component
+public class TextFormater {
 
     /**
      * Возвращает текст для меню отображающих стоимость валюты
