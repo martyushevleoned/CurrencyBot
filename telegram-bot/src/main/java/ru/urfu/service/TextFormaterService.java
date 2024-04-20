@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.urfu.model.CurrencyRequest;
 import ru.urfu.model.CurrencyResponse;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -16,9 +17,10 @@ public class TextFormaterService {
      * Возвращает текст для меню отображающих стоимость валюты
      */
     public String getPriceInfo(CurrencyRequest currencyRequest, CurrencyResponse currencyResponse) {
+        Date date = new Date();
         return "API: " + currencyRequest.getApi() +
-                "\nвремя обращения к API: " + currencyResponse.getDatetime().toString() +
-                "\nвремя обращения к боту: " + new Date() +
+                "\nдата: " + new SimpleDateFormat("dd.MM.yyyy").format(date) +
+                "\nвремя: " + new SimpleDateFormat("HH:mm:ss").format(date) +
                 "\n1 " + currencyRequest.getCurrency() + " = " + String.format("%.3f", currencyResponse.getPrice()) + " USD";
     }
 }

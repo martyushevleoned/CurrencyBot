@@ -31,6 +31,10 @@ public class UpdateController {
     private CurrencyMenu currencyMenu;
     @Autowired
     private TrackedCurrencyMenu trackedCurrencyMenu;
+    @Autowired
+    private ApiListMenu apiListMenu;
+    @Autowired
+    private ApiMenu apiMenu;
 
     /**
      * Вызывается единожды при инициализации.
@@ -45,6 +49,9 @@ public class UpdateController {
         menuList.add(trackedCurrencyListMenu);
         menuList.add(currencyMenu);
         menuList.add(trackedCurrencyMenu);
+        menuList.add(apiListMenu);
+        menuList.add(apiMenu);
+
     }
 
     /**
