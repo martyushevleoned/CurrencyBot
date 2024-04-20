@@ -5,12 +5,12 @@ import java.util.Date;
 /**
  * Стандартизированный ответ стоимости валюты от ApiManager
  */
-public class Response {
+public class CurrencyResponse {
 
     private final double price;
     private final Date datetime;
 
-    public Response(double price, Date datetime) {
+    public CurrencyResponse(double price, Date datetime) {
         this.price = price;
         this.datetime = datetime;
     }

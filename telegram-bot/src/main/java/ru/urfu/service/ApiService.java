@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.ApiManager;
-import ru.urfu.model.Request;
-import ru.urfu.model.Response;
+import ru.urfu.model.CurrencyRequest;
+import ru.urfu.model.CurrencyResponse;
 
 import java.util.Comparator;
 import java.util.List;
@@ -34,7 +34,7 @@ public class ApiService {
     /**
      * Возвращает стоимость валюты из модуля currency-api
      */
-    public Response getPrice(Request request) {
-        return apiManager.getPrice(request);
+    public CurrencyResponse getPrice(CurrencyRequest currencyRequest) {
+        return apiManager.getPrice(currencyRequest);
     }
 }

@@ -1,6 +1,6 @@
 package ru.urfu.api;
 
-import ru.urfu.model.Response;
+import ru.urfu.model.CurrencyResponse;
 
 import java.util.Set;
 
@@ -12,7 +12,7 @@ public interface CurrencyApi {
     /**
      * Возвращает название API
      */
-    String getName();
+    String getDescription();
 
     /**
      * Возвращает список валют стоимость которых можно получить при помощи данного API
@@ -22,5 +22,5 @@ public interface CurrencyApi {
     /**
      * Возвращает актуальную стоимость валюты
      */
-    Response getPrice(String currency);
+    CurrencyResponse getPrice(String currency);
 }

@@ -2,7 +2,7 @@ package ru.urfu.service;
 
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import ru.urfu.model.Request;
+import ru.urfu.model.CurrencyRequest;
 
 /**
  * Преобразует CallbackData в Request и ,Request в InlineKeyboardButton.
@@ -16,18 +16,18 @@ public class DataConverterService {
     /**
      * Преобразует callback (от нажатия кнопки) в Request
      */
-    public Request callbackDataToRequest(String callbackData) {
+    public CurrencyRequest callbackDataToRequest(String callbackData) {
         String[] parts = callbackData.split(splitSequence);
-        return new Request(parts[1], parts[0]);
+        return new CurrencyRequest(parts[1], parts[0]);
     }
 
     /**
      * Создаёт кнопку по параметрам Request
      */
-    public InlineKeyboardButton requestToInlineKeyboardButton(Request request) {
+    public InlineKeyboardButton requestToInlineKeyboardButton(CurrencyRequest currencyRequest) {
         InlineKeyboardButton button = new InlineKeyboardButton();
-        button.setText(request.getCurrency() + " - " + request.getApi());
-        button.setCallbackData(request.getCurrency() + splitSequence + request.getApi());
+        button.setText(currencyRequest.getCurrency() + " - " + currencyRequest.getApi());
+        button.setCallbackData(currencyRequest.getCurrency() + splitSequence + currencyRequest.getApi());
         return button;
     }
 }
