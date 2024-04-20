@@ -1,10 +1,8 @@
 package ru.urfu;
 
-import ru.urfu.api.CoinCapCryptoApi;
-import ru.urfu.api.CoinCapFiatApi;
-import ru.urfu.api.CurrencyApi;
-import ru.urfu.model.Request;
-import ru.urfu.model.Response;
+import ru.urfu.api.*;
+import ru.urfu.model.CurrencyRequest;
+import ru.urfu.model.CurrencyResponse;
 import ru.urfu.utils.JsonParser;
 import ru.urfu.utils.RequestSender;
 
@@ -19,16 +17,16 @@ public class ApiManager {
     private final JsonParser jsonParser = new JsonParser();
 
     private final Map<String, CurrencyApi> currencyApiMap = new LinkedHashMap<>() {{
-        CurrencyApi coinCapCryptoApi = new CoinCapCryptoApi(requestSender, jsonParser);
-        put(coinCapCryptoApi.getName(), coinCapCryptoApi);
-//        CurrencyApi coinCapFiatApi = new CoinCapFiatApi(requestSender, jsonParser);
-//        put(coinCapFiatApi.getName(), coinCapFiatApi);
+        put("CoinCap API", new CoinCapApi(requestSender, jsonParser));
+        put("ExchangeRate API", new ExchangeRateApi(requestSender, jsonParser));
+        put("Exchange API", new ExchangeApi(requestSender, jsonParser));
+        put("Cbr API", new CbrApi(requestSender, jsonParser));
     }};
 
-    private final Set<Request> requestList = new LinkedHashSet<>() {{
+    private final Set<CurrencyRequest> currencyRequestList = new LinkedHashSet<>() {{
         currencyApiMap.forEach((apiName, api) ->
                 api.getCurrencies().forEach(currency ->
-                        add(new Request(apiName, currency))
+                        add(new CurrencyRequest(apiName, currency))
                 )
         );
     }};
@@ -43,18 +41,26 @@ public class ApiManager {
     /**
      * Возвращает названия все возможные корректные запросы
      */
-    public Set<Request> getPossibleRequests() {
-        return requestList;
+    public Set<CurrencyRequest> getPossibleRequests() {
+        return currencyRequestList;
     }
 
     /**
      * Возвращает стоимость валюты на основе названия API и валюты
      */
-    public Response getPrice(Request request) {
-        assert currencyApiMap.containsKey(request.getApi());
-        CurrencyApi currencyApi = currencyApiMap.get(request.getApi());
+    public CurrencyResponse getPrice(CurrencyRequest currencyRequest) {
+        assert currencyApiMap.containsKey(currencyRequest.getApi());
+        CurrencyApi currencyApi = currencyApiMap.get(currencyRequest.getApi());
 
-        assert currencyApi.getCurrencies().contains(request.getCurrency());
-        return currencyApi.getPrice(request.getCurrency());
+        assert currencyApi.getCurrencies().contains(currencyRequest.getCurrency());
+        return currencyApi.getPrice(currencyRequest.getCurrency());
+    }
+
+    /**
+     * Возвращает описание API по названию API
+     */
+    public String getDescription(String apiName){
+        assert currencyApiMap.containsKey(apiName);
+        return currencyApiMap.get(apiName).getDescription();
     }
 }

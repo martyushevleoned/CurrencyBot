@@ -1,8 +1,8 @@
 package ru.urfu.service;
 
 import org.springframework.stereotype.Service;
-import ru.urfu.model.Request;
-import ru.urfu.model.Response;
+import ru.urfu.model.CurrencyRequest;
+import ru.urfu.model.CurrencyResponse;
 
 import java.util.Date;
 
@@ -15,10 +15,10 @@ public class TextFormaterService {
     /**
      * Возвращает текст для меню отображающих стоимость валюты
      */
-    public String getPriceInfo(Request request, Response response) {
-        return "API: " + request.getApi() +
-                "\nвремя обращения к API: " + response.getDatetime().toString() +
+    public String getPriceInfo(CurrencyRequest currencyRequest, CurrencyResponse currencyResponse) {
+        return "API: " + currencyRequest.getApi() +
+                "\nвремя обращения к API: " + currencyResponse.getDatetime().toString() +
                 "\nвремя обращения к боту: " + new Date() +
-                "\n1 " + request.getCurrency() + " = " + String.format("%.3f", response.getPrice()) + " USD";
+                "\n1 " + currencyRequest.getCurrency() + " = " + String.format("%.3f", currencyResponse.getPrice()) + " USD";
     }
 }

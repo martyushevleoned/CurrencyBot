@@ -8,8 +8,8 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import ru.urfu.model.Request;
-import ru.urfu.model.Response;
+import ru.urfu.model.CurrencyRequest;
+import ru.urfu.model.CurrencyResponse;
 import ru.urfu.service.ApiService;
 import ru.urfu.service.DataConverterService;
 import ru.urfu.service.TextFormaterService;
@@ -66,11 +66,11 @@ public class CurrencyMenu implements Menu {
         }
 
         // запрос
-        Request request = dataConverter.callbackDataToRequest(callbackData);
-        Response response = apiService.getPrice(request);
+        CurrencyRequest currencyRequest = dataConverter.callbackDataToRequest(callbackData);
+        CurrencyResponse currencyResponse = apiService.getPrice(currencyRequest);
 
         // текст меню
-        String text = textFormaterService.getPriceInfo(request, response);
+        String text = textFormaterService.getPriceInfo(currencyRequest, currencyResponse);
 
         return EditMessageText.builder()
                 .chatId(chatId)
