@@ -37,4 +37,18 @@ public class ApiService {
     public CurrencyResponse getPrice(CurrencyRequest currencyRequest) {
         return apiManager.getPrice(currencyRequest);
     }
+
+    /**
+     * Возвращает отсортированный список всех используемых API
+     */
+    public List<String> getAllApiNames(){
+        return apiManager.getAllApi().stream().sorted().toList();
+    }
+
+    /**
+     * Возвращает описание API по названию
+     */
+    public String getDescription(String apiName) {
+        return apiManager.getDescription(apiName);
+    }
 }
