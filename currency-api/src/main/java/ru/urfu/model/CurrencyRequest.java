@@ -3,7 +3,7 @@ package ru.urfu.model;
 import java.util.Objects;
 
 /**
- * Класс для стандартизированного обращения к ApiManager
+ * Класс для обращения к {@link ru.urfu.ApiManager ApiManager}, содержащий название API и название валюты
  */
 public class CurrencyRequest {
 
@@ -34,13 +34,5 @@ public class CurrencyRequest {
     @Override
     public int hashCode() {
         return Objects.hash(api, currency);
-    }
-
-    @Override
-    public String toString() {
-        return "Request{" +
-                "api='" + api + '\'' +
-                ", currency='" + currency + '\'' +
-                '}';
     }
 }

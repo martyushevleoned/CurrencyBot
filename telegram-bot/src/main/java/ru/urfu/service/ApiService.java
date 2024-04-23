@@ -1,11 +1,15 @@
 package ru.urfu.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.urfu.ApiManager;
+import ru.urfu.api.CbrApi;
+import ru.urfu.api.CoinCapApi;
+import ru.urfu.api.ExchangeApi;
+import ru.urfu.api.ExchangeRateApi;
 import ru.urfu.model.CurrencyRequest;
 import ru.urfu.model.CurrencyResponse;
-import ru.urfu.utils.DataConverter;
+import ru.urfu.utils.JsonParser;
+import ru.urfu.utils.RequestSender;
 
 import java.util.List;
 import java.util.Set;
@@ -16,34 +20,42 @@ import java.util.Set;
 @Service
 public class ApiService {
 
-    private final ApiManager apiManager = new ApiManager();
-
-    @Autowired
-    private DataConverter dataConverter;
+    private final RequestSender requestSender = new RequestSender();
+    private final JsonParser jsonParser = new JsonParser();
+    private final ApiManager apiManager = new ApiManager(List.of(
+            new CoinCapApi(requestSender, jsonParser),
+            new ExchangeApi(requestSender, jsonParser),
+            new ExchangeRateApi(requestSender, jsonParser),
+            new CbrApi(requestSender, jsonParser)
+    ));
 
     /**
-     * Возвращает все доступные запросы к API
+     * Получить все доступные запросы к API
      */
     public Set<CurrencyRequest> getPossibleRequests() {
         return apiManager.getPossibleRequests();
     }
 
     /**
-     * Возвращает стоимость валюты из модуля currency-api
+     * Получить стоимость валюты из модуля currency-api
+     *
+     * @param currencyRequest запрос из модуля currency-api
      */
     public CurrencyResponse getPrice(CurrencyRequest currencyRequest) {
         return apiManager.getPrice(currencyRequest);
     }
 
     /**
-     * Возвращает отсортированный список всех используемых API
+     * Получить отсортированный список всех используемых API
      */
-    public List<String> getAllApiNames(){
-        return apiManager.getAllApi().stream().sorted().toList();
+    public Set<String> getAllApiNames() {
+        return apiManager.getAllApiNames();
     }
 
     /**
-     * Возвращает описание API по названию
+     * Получить описание API по названию
+     *
+     * @param apiName название API
      */
     public String getDescription(String apiName) {
         return apiManager.getDescription(apiName);
