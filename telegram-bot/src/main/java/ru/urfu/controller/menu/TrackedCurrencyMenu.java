@@ -11,8 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import ru.urfu.model.CurrencyRequest;
 import ru.urfu.model.CurrencyResponse;
 import ru.urfu.service.ApiService;
-import ru.urfu.service.DataConverterService;
-import ru.urfu.service.TextFormaterService;
+import ru.urfu.utils.DataConverter;
+import ru.urfu.utils.TextFormater;
 
 import java.util.List;
 
@@ -23,10 +23,10 @@ public class TrackedCurrencyMenu implements Menu {
     private ApiService apiService;
 
     @Autowired
-    private TextFormaterService textFormaterService;
+    private TextFormater textFormater;
 
     @Autowired
-    private DataConverterService dataConverter;
+    private DataConverter dataConverter;
 
     private final String menuName = MenuType.TRACKED_CURRENCY.name();
 
@@ -56,7 +56,7 @@ public class TrackedCurrencyMenu implements Menu {
         CurrencyResponse currencyResponse = apiService.getPrice(currencyRequest);
 
         // текст меню
-        String text = textFormaterService.getPriceInfo(currencyRequest, currencyResponse);
+        String text = textFormater.getPriceInfo(currencyRequest, currencyResponse);
 
         return EditMessageText.builder()
                 .chatId(chatId)

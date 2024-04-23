@@ -10,10 +10,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.model.CurrencyRequest;
 import ru.urfu.model.CurrencyResponse;
-import ru.urfu.service.ApiService;
-import ru.urfu.service.DataConverterService;
-import ru.urfu.service.TextFormaterService;
-import ru.urfu.service.TrackService;
+import ru.urfu.service.*;
+import ru.urfu.utils.DataConverter;
+import ru.urfu.utils.CallbackFlagManager;
+import ru.urfu.utils.TextFormater;
 
 import java.util.List;
 
@@ -27,14 +27,15 @@ public class CurrencyMenu implements Menu {
     private TrackService trackService;
 
     @Autowired
-    private TextFormaterService textFormaterService;
+    private TextFormater textFormater;
 
     @Autowired
-    private DataConverterService dataConverter;
+    private DataConverter dataConverter;
+
+    @Autowired
+    private CallbackFlagManager callbackFlagManager;
 
     private final String menuName = MenuType.CURRENCY_ADD_TO_TRACK.name();
-
-    private final String flag = "$";
 
     @Override
     public boolean matchSendMessage(Message message) {
@@ -60,8 +61,8 @@ public class CurrencyMenu implements Menu {
         int messageId = callbackQuery.getMessage().getMessageId();
 
         // обработка флага
-        if (callbackData.contains(flag)) {
-            callbackData = callbackData.substring(flag.length());
+        if (callbackFlagManager.containsFlag(callbackData)) {
+            callbackData = callbackFlagManager.getBody(callbackData);
             trackService.addToTrack(chatId, dataConverter.callbackDataToRequest(callbackData));
         }
 
@@ -70,7 +71,7 @@ public class CurrencyMenu implements Menu {
         CurrencyResponse currencyResponse = apiService.getPrice(currencyRequest);
 
         // текст меню
-        String text = textFormaterService.getPriceInfo(currencyRequest, currencyResponse);
+        String text = textFormater.getPriceInfo(currencyRequest, currencyResponse);
 
         return EditMessageText.builder()
                 .chatId(chatId)
@@ -82,7 +83,7 @@ public class CurrencyMenu implements Menu {
 
     private InlineKeyboardMarkup getInlineKeyboardMarkup(long chatId, String callbackData) {
 
-        String addToTrackCallback = menuName + flag + callbackData;
+        String addToTrackCallback = callbackFlagManager.setFlag(menuName + callbackData, "");
         String addToTrackText;
 
         if (trackService.isTracked(chatId, dataConverter.callbackDataToRequest(callbackData))) {
