@@ -3,7 +3,7 @@ package ru.urfu.model;
 import java.util.Date;
 
 /**
- * Стандартизированный ответ стоимости валюты от ApiManager
+ * Ответ от {@link ru.urfu.ApiManager ApiManager}, содержащий стоимость валюты и время обращения к API
  */
 public class CurrencyResponse {
 
@@ -21,13 +21,5 @@ public class CurrencyResponse {
 
     public double getPrice() {
         return price;
-    }
-
-    @Override
-    public String toString() {
-        return "Response{" +
-                "datetime=" + datetime +
-                ", price=" + price +
-                '}';
     }
 }

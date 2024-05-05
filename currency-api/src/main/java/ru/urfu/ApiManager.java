@@ -1,10 +1,10 @@
 package ru.urfu;
 
 import ru.urfu.api.*;
+import ru.urfu.exceptions.ApiNotFoundException;
+import ru.urfu.exceptions.ApiNotSupportedCurrencyException;
 import ru.urfu.model.CurrencyRequest;
 import ru.urfu.model.CurrencyResponse;
-import ru.urfu.utils.JsonParser;
-import ru.urfu.utils.RequestSender;
 
 import java.util.*;
 
@@ -13,54 +13,69 @@ import java.util.*;
  */
 public class ApiManager {
 
-    private final RequestSender requestSender = new RequestSender();
-    private final JsonParser jsonParser = new JsonParser();
+    private final Map<String, CurrencyApi> currencyApiMap;
+    private final Set<CurrencyRequest> currencyRequests;
 
-    private final Map<String, CurrencyApi> currencyApiMap = new LinkedHashMap<>() {{
-        put("CoinCap API", new CoinCapApi(requestSender, jsonParser));
-        put("ExchangeRate API", new ExchangeRateApi(requestSender, jsonParser));
-        put("Exchange API", new ExchangeApi(requestSender, jsonParser));
-        put("Cbr API", new CbrApi(requestSender, jsonParser));
-    }};
+    public ApiManager(List<CurrencyApi> currencyApiList) {
+        currencyApiMap = Collections.unmodifiableMap(new HashMap<>() {{
+            currencyApiList.forEach(currencyApi ->
+                    put(currencyApi.getName(), currencyApi)
+            );
+        }});
 
-    private final Set<CurrencyRequest> currencyRequestList = new LinkedHashSet<>() {{
-        currencyApiMap.forEach((apiName, api) ->
-                api.getCurrencies().forEach(currency ->
-                        add(new CurrencyRequest(apiName, currency))
+        currencyRequests = Collections.unmodifiableSet(new HashSet<>() {{
+            currencyApiList.forEach(currencyApi ->
+                currencyApi.getCurrencies().forEach(currency ->
+                        add(new CurrencyRequest(currencyApi.getName(), currency))
                 )
-        );
-    }};
+            );
+        }});
+    }
 
     /**
-     * Возвращает названия всех доступных API
+     * Получить названия всех доступных API
      */
-    public Set<String> getAllApi() {
+    public Set<String> getAllApiNames() {
         return currencyApiMap.keySet();
     }
 
     /**
-     * Возвращает названия все возможные корректные запросы
+     * Получить все поддерживаемые запросы
      */
     public Set<CurrencyRequest> getPossibleRequests() {
-        return currencyRequestList;
+        return currencyRequests;
     }
 
     /**
-     * Возвращает стоимость валюты на основе названия API и валюты
+     * Получить стоимость валюты на основе названия API и валюты
+     *
+     * @param currencyRequest запрос с информацией о запрашиваемой валюте и названием API
+     * @return {@link CurrencyResponse} содержаший стоимость валюты и время получения стоимости
      */
     public CurrencyResponse getPrice(CurrencyRequest currencyRequest) {
-        assert currencyApiMap.containsKey(currencyRequest.getApi());
+
+        if (!currencyApiMap.containsKey(currencyRequest.getApi()))
+            throw new ApiNotFoundException("Указанный API не существует");
+
         CurrencyApi currencyApi = currencyApiMap.get(currencyRequest.getApi());
 
-        assert currencyApi.getCurrencies().contains(currencyRequest.getCurrency());
+        if (!currencyApi.getCurrencies().contains(currencyRequest.getCurrency()))
+            throw new ApiNotSupportedCurrencyException("API не поддерживает данную валюту");
+
         return currencyApi.getPrice(currencyRequest.getCurrency());
     }
 
     /**
-     * Возвращает описание API по названию API
+     * Получить описание API по названию
+     *
+     * @param apiName название API
+     * @return текстовое описание API
      */
-    public String getDescription(String apiName){
-        assert currencyApiMap.containsKey(apiName);
+    public String getDescription(String apiName) {
+
+        if (!currencyApiMap.containsKey(apiName))
+            throw new ApiNotFoundException("Указанный API не существует");
+
         return currencyApiMap.get(apiName).getDescription();
     }
 }

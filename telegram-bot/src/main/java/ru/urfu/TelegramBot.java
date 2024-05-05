@@ -1,7 +1,6 @@
 package ru.urfu;
 
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -14,22 +13,24 @@ import ru.urfu.controller.UpdateController;
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
 
-    @Autowired
-    private BotConfig botConfig;
+    private final BotConfig botConfig;
+    private final UpdateController updateController;
 
-    @Autowired
-    private UpdateController updateController;
+    public TelegramBot(BotConfig botConfig, UpdateController updateController) {
+        this.botConfig = botConfig;
+        this.updateController = updateController;
+    }
 
     /**
-     * Передаёт ссылку на бота в updateController
+     * Инициализировать {@link UpdateController}
      */
     @PostConstruct
-    private void init(){
+    private void init() {
         updateController.registerTelegramBot(this);
     }
 
     /**
-     * Вызывается при обновлении сообщений бота и передаёт обновления в обработчик
+     * Получить и обработать {@link Update обновление}
      */
     @Override
     public void onUpdateReceived(Update update) {
@@ -37,7 +38,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     /**
-     * Возвращает имя бота
+     * Получить имя бота
      */
     @Override
     public String getBotUsername() {
@@ -45,7 +46,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
 
     /**
-     * Возвращает токен бота
+     * Получить токен бота
      */
     @Override
     public String getBotToken() {

@@ -10,7 +10,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.urfu.TelegramBot;
 
 /**
- * Инициалтзирует бота в контексте Spring
+ * Инициализирует бота в контексте Spring
  */
 @Component
 public class BotInitializer {
@@ -19,7 +19,7 @@ public class BotInitializer {
     private TelegramBot bot;
 
     /**
-     * Инициализирует бота
+     * Инициализировать бота
      */
     @EventListener({ContextRefreshedEvent.class})
     public void init() throws TelegramApiException {

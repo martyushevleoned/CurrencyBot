@@ -11,21 +11,22 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("application.properties")
 public class BotConfig {
 
-    @Value("${bot.name}")
-    private String name;
-    @Value("${bot.token}")
-    private String token;
-
     /**
      * Имя бота
      */
-    public String getName() {
-        return name;
-    }
+    @Value("${bot.name}")
+    private String name;
 
     /**
      * Токен бота
      */
+    @Value("${bot.token}")
+    private String token;
+
+    public String getName() {
+        return name;
+    }
+
     public String getToken() {
         return token;
     }

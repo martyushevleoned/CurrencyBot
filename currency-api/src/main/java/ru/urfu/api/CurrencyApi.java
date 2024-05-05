@@ -5,22 +5,27 @@ import ru.urfu.model.CurrencyResponse;
 import java.util.Set;
 
 /**
- * Класс позволяющий обращаться получать стоимость валют
+ * Позволяет обращаться к API и получать стоимость валют
  */
 public interface CurrencyApi {
 
     /**
-     * Возвращает название API
+     * Получить название API
+     */
+    String getName();
+
+    /**
+     * Получить описание API
      */
     String getDescription();
 
     /**
-     * Возвращает список валют стоимость которых можно получить при помощи данного API
+     * Получить список всех валют поддерживаемых данным API
      */
     Set<String> getCurrencies();
 
     /**
-     * Возвращает актуальную стоимость валюты
+     * Получить текущую стоимость валюты
      */
     CurrencyResponse getPrice(String currency);
 }
