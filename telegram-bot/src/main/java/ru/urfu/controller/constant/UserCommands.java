@@ -1,4 +1,4 @@
-package ru.urfu.controller.menu.constant;
+package ru.urfu.controller.constant;
 
 /**
  * Список всех команд воспринимаемых ботом
@@ -28,13 +28,13 @@ public enum UserCommands {
     /**
      * Текст команды
      */
-    private final String text;
+    private final String command;
 
-    UserCommands(String text) {
-        this.text = text;
+    UserCommands(String command) {
+        this.command = command;
     }
 
-    public String getText() {
-        return text;
+    public String getCommand() {
+        return command;
     }
 }

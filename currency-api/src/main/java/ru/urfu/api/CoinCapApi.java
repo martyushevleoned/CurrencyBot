@@ -1,7 +1,9 @@
 package ru.urfu.api;
 
-import ru.urfu.model.CurrencyResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.urfu.model.ApiDescription;
+import ru.urfu.model.CurrencyResponse;
 import ru.urfu.utils.CurrencyCache;
 import ru.urfu.utils.JsonParser;
 import ru.urfu.utils.RequestSender;
@@ -11,15 +13,17 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Класс позволяющий получать стоимость валют используя оффициальный API CoinCap
+ * Класс позволяющий получать стоимость валют используя официальный API CoinCap
  */
+@Component
 public class CoinCapApi implements CurrencyApi {
-
-    private static final String NAME = "CoinCap API";
-    private static final ApiDescription DESCRIPTION = new ApiDescription(NAME, "https://coincap.io/", "1 минута");
 
     private final RequestSender requestSender;
     private final JsonParser jsonParser;
+
+    private final String NAME = "CoinCap API";
+    private final String DESCRIPTION = new ApiDescription(NAME, "https://coincap.io/", "1 минута").getDescription();
+    private final CurrencyCache cache = new CurrencyCache(Duration.ofMinutes(1));
 
     private final Map<String, String> currencyUrlMap = Map.of(
             "Bitcoin", "https://api.coincap.io/v2/rates/bitcoin",
@@ -29,9 +33,7 @@ public class CoinCapApi implements CurrencyApi {
             "Tether", "https://api.coincap.io/v2/rates/tether"
     );
 
-    private final Duration updateDuration = Duration.ofMinutes(1);
-    private final CurrencyCache cache = new CurrencyCache(updateDuration);
-
+    @Autowired
     public CoinCapApi(RequestSender requestSender, JsonParser jsonParser) {
         this.requestSender = requestSender;
         this.jsonParser = jsonParser;
@@ -44,7 +46,7 @@ public class CoinCapApi implements CurrencyApi {
 
     @Override
     public String getDescription() {
-        return DESCRIPTION.toString();
+        return DESCRIPTION;
     }
 
     @Override
@@ -59,7 +61,7 @@ public class CoinCapApi implements CurrencyApi {
             String url = currencyUrlMap.get(currency);
             String response = requestSender.sendGetRequest(url);
 
-            double price = Double.parseDouble(jsonParser.parse(response, "data.rateUsd"));
+            double price = Double.parseDouble(jsonParser.parse(response, "$.data.rateUsd"));
             cache.save(currency, price);
         }
 

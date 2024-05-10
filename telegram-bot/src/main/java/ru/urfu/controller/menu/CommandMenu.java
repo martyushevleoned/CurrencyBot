@@ -4,14 +4,14 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 /**
- * Меню вызываемое при получении текстового сообщения
+ * Меню вызываемое при получении текстовой команды
  */
-public interface SendMenu extends Menu {
+public interface CommandMenu {
 
     /**
-     * Вызывает ли текстовое сообщение данное меню
+     * Получить текст команды по которой вызывается меню
      */
-    boolean matchSendMessage(Message message);
+    String getCommand();
 
     /**
      * Формирует меню для отправки

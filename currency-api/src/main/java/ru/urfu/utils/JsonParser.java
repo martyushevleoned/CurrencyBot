@@ -1,58 +1,34 @@
 package ru.urfu.utils;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import com.jayway.jsonpath.InvalidPathException;
+import com.jayway.jsonpath.JsonPath;
+import org.springframework.stereotype.Component;
 import ru.urfu.exceptions.ParseJsonException;
+
+import java.util.Objects;
 
 /**
  * Класс для получения значений из json
  */
+@Component
 public class JsonParser {
 
     /**
      * Получить значение из json по указанному пути
      *
-     * @param json представление json в виде строки. допускает содержание пробелов и переносов строк
-     * @param path путь до значения в формате: поле1.поле2.поле3
+     * @param json представление json в виде строки. Допускает содержание пробелов и переносов строк
+     * @param path путь до значения в формате: $.поле1.[индекс2].поле3
      * @return значение в виде строки
+     * @throws ParseJsonException если путь в json недостижим
      */
     public String parse(String json, String path) {
-        Object object = JSONValue.parse(json);
 
-        String[] keys = path.split("\\.");
-        for (String key : keys) {
-
-            if (isInteger(key)) {
-                int index = Integer.parseInt(key);
-                if (object instanceof JSONArray jsonArray)
-                    object = jsonArray.get(index);
-                else
-                    throw new ParseJsonException("Недостижимый путь в json");
-
-            } else {
-                if (object instanceof JSONObject jsonObject)
-                    object = jsonObject.get(key);
-                else
-                    throw new ParseJsonException("Недостижимый путь в json");
-            }
-        }
-
-        return object == null
-                ? "null"
-                : object.toString();
-    }
-
-    private boolean isInteger(String strNum) {
-        if (strNum == null) {
-            return false;
-        }
         try {
-            Integer.parseInt(strNum);
-        } catch (NumberFormatException nfe) {
-            return false;
+            Object j = JsonPath.read(json, path);
+            return Objects.toString(j);
+        } catch (InvalidPathException e) {
+            throw new ParseJsonException("Недостижимый путь в json");
         }
-        return true;
     }
 }
 

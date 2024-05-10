@@ -22,8 +22,8 @@ public class TextFormater {
     public String getCurrencyInfo(CurrencyRequest currencyRequest) {
         return "%s - %s"
                 .formatted(
-                        currencyRequest.getApi(),
-                        currencyRequest.getCurrency()
+                        currencyRequest.api(),
+                        currencyRequest.currency()
                 );
     }
 
@@ -44,11 +44,11 @@ public class TextFormater {
                 1 %s = %s USD
                 """
                 .formatted(
-                        currencyRequest.getApi(),
+                        currencyRequest.api(),
                         new SimpleDateFormat("dd.MM.yyyy").format(date),
                         new SimpleDateFormat("HH:mm").format(date),
-                        currencyRequest.getCurrency(),
-                        String.format("%.3f", currencyResponse.getPrice())
+                        currencyRequest.currency(),
+                        String.format("%.3f", currencyResponse.price())
                 );
     }
 }

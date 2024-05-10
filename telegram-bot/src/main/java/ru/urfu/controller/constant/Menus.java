@@ -1,11 +1,11 @@
-package ru.urfu.controller.menu.constant;
+package ru.urfu.controller.constant;
 
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 /**
- * Стандартизирует названия меню воизбежание опечаток
+ * Стандартизирует названия меню во избежание опечаток
  */
-public enum MenuTypes {
+public enum Menus {
 
     /**
      * Главное меню
@@ -47,20 +47,20 @@ public enum MenuTypes {
      * во избежание превышения допустимого размера
      * {@link CallbackQuery#getData}
      */
-    private final String name;
+    private final String menuName;
 
     /**
      * Текст меню
      */
     private final String text;
 
-    MenuTypes(String name, String text) {
-        this.name = name;
+    Menus(String menuName, String text) {
+        this.menuName = menuName;
         this.text = text;
     }
 
-    public String getName() {
-        return name;
+    public String getMenuName() {
+        return menuName;
     }
 
     public String getText() {

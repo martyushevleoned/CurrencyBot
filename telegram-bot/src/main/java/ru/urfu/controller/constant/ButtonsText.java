@@ -1,4 +1,4 @@
-package ru.urfu.controller.menu.constant;
+package ru.urfu.controller.constant;
 
 /**
  * Список текстов кнопок

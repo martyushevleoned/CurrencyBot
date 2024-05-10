@@ -3,7 +3,10 @@ package ru.urfu.service;
 import org.springframework.stereotype.Service;
 import ru.urfu.model.CurrencyRequest;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Класс для хранения запросов отслеживаемых пользователем
@@ -38,8 +41,8 @@ public class TrackService {
      *
      * @param chatId id чата
      */
-    public List<CurrencyRequest> getTrackedRequests(long chatId) {
-        return trackedCurrencies.getOrDefault(chatId, Set.of()).stream().toList();
+    public Set<CurrencyRequest> getTrackedRequests(long chatId) {
+        return trackedCurrencies.getOrDefault(chatId, Set.of());
     }
 
     /**

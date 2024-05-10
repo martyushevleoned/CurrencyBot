@@ -6,8 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.urfu.model.CurrencyRequest;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Тестирование компонента {@link TrackService}
@@ -60,16 +60,17 @@ public class TrackServiceTest {
         Assert.assertFalse(trackService.isTracked(1, firstCurrencyRequest));
         trackService.addToTrack(1, firstCurrencyRequest);
         Assert.assertTrue(trackService.isTracked(1, firstCurrencyRequest));
-        Assert.assertEquals(List.of(firstCurrencyRequest), trackService.getTrackedRequests(1));
+        Assert.assertEquals(Set.of(firstCurrencyRequest), trackService.getTrackedRequests(1));
 
         Assert.assertFalse(trackService.isTracked(1, secondCurrencyRequest));
         trackService.addToTrack(1, secondCurrencyRequest);
         Assert.assertTrue(trackService.isTracked(1, secondCurrencyRequest));
+        Assert.assertEquals(Set.of(firstCurrencyRequest, secondCurrencyRequest), trackService.getTrackedRequests(1));
 
         trackService.removeFromTrack(1, firstCurrencyRequest);
         Assert.assertFalse(trackService.isTracked(1, firstCurrencyRequest));
         Assert.assertTrue(trackService.isTracked(1, secondCurrencyRequest));
-        Assert.assertEquals(List.of(secondCurrencyRequest), trackService.getTrackedRequests(1));
+        Assert.assertEquals(Set.of(secondCurrencyRequest), trackService.getTrackedRequests(1));
     }
 
     /**
@@ -90,8 +91,8 @@ public class TrackServiceTest {
         trackService.addToTrack(1, firstCurrencyRequest);
         trackService.addToTrack(2, secondCurrencyRequest);
 
-        Assert.assertEquals(List.of(firstCurrencyRequest), trackService.getTrackedRequests(1));
-        Assert.assertEquals(List.of(secondCurrencyRequest), trackService.getTrackedRequests(2));
+        Assert.assertEquals(Set.of(firstCurrencyRequest), trackService.getTrackedRequests(1));
+        Assert.assertEquals(Set.of(secondCurrencyRequest), trackService.getTrackedRequests(2));
     }
 
 }

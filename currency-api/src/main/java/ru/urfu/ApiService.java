@@ -1,35 +1,37 @@
 package ru.urfu;
 
-import ru.urfu.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ru.urfu.api.CurrencyApi;
 import ru.urfu.exceptions.ApiNotFoundException;
 import ru.urfu.exceptions.ApiNotSupportedCurrencyException;
 import ru.urfu.model.CurrencyRequest;
 import ru.urfu.model.CurrencyResponse;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Единая точка для обращения к любому из подключённых API
  */
-public class ApiManager {
+@Service
+public class ApiService {
 
     private final Map<String, CurrencyApi> currencyApiMap;
     private final Set<CurrencyRequest> currencyRequests;
 
-    public ApiManager(List<CurrencyApi> currencyApiList) {
-        currencyApiMap = Collections.unmodifiableMap(new HashMap<>() {{
-            currencyApiList.forEach(currencyApi ->
-                    put(currencyApi.getName(), currencyApi)
-            );
-        }});
+    @Autowired
+    public ApiService(List<CurrencyApi> currencyApiList) {
 
-        currencyRequests = Collections.unmodifiableSet(new HashSet<>() {{
-            currencyApiList.forEach(currencyApi ->
-                currencyApi.getCurrencies().forEach(currency ->
-                        add(new CurrencyRequest(currencyApi.getName(), currency))
-                )
-            );
-        }});
+        currencyApiMap = currencyApiList.stream().collect(Collectors.toUnmodifiableMap(CurrencyApi::getName, Function.identity()));
+
+        currencyRequests = currencyApiList.stream()
+                .flatMap(currencyApi -> currencyApi.getCurrencies().stream()
+                        .map(currency -> new CurrencyRequest(currencyApi.getName(), currency)))
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     /**
@@ -50,19 +52,22 @@ public class ApiManager {
      * Получить стоимость валюты на основе названия API и валюты
      *
      * @param currencyRequest запрос с информацией о запрашиваемой валюте и названием API
-     * @return {@link CurrencyResponse} содержаший стоимость валюты и время получения стоимости
+     * @return {@link CurrencyResponse} содержащий стоимость валюты и время получения стоимости
+     * @throws ApiNotFoundException если API не существует
+     * @throws ApiNotSupportedCurrencyException если API не поддерживает валюту
      */
     public CurrencyResponse getPrice(CurrencyRequest currencyRequest) {
 
-        if (!currencyApiMap.containsKey(currencyRequest.getApi()))
+        if (!currencyApiMap.containsKey(currencyRequest.api()))
             throw new ApiNotFoundException("Указанный API не существует");
 
-        CurrencyApi currencyApi = currencyApiMap.get(currencyRequest.getApi());
+        CurrencyApi currencyApi = currencyApiMap.get(currencyRequest.api());
+        String currency = currencyRequest.currency();
 
-        if (!currencyApi.getCurrencies().contains(currencyRequest.getCurrency()))
+        if (!currencyApi.getCurrencies().contains(currency))
             throw new ApiNotSupportedCurrencyException("API не поддерживает данную валюту");
 
-        return currencyApi.getPrice(currencyRequest.getCurrency());
+        return currencyApi.getPrice(currency);
     }
 
     /**
@@ -70,6 +75,7 @@ public class ApiManager {
      *
      * @param apiName название API
      * @return текстовое описание API
+     * @throws ApiNotSupportedCurrencyException если API не поддерживает валюту
      */
     public String getDescription(String apiName) {
 
