@@ -14,13 +14,14 @@ import java.util.Random;
  */
 public class CurrencyCacheTest {
 
-    private static final int RANDOM_STRING_LENGTH = 10;
-
     private CurrencyCache cache;
 
+    /**
+     * Пересоздать кэш
+     */
     @Before
     public void setUp() {
-        cache = new CurrencyCache(Duration.ofSeconds(1));
+        cache = new CurrencyCache(Duration.ofMillis(100));
     }
 
     /**
@@ -35,25 +36,24 @@ public class CurrencyCacheTest {
     @Test
     public void saveGetTest() {
 
-        String currencyName = RandomStringUtils.random(RANDOM_STRING_LENGTH);
+        String currencyName = RandomStringUtils.random(10);
         double currencyPrice = new Random().nextDouble();
 
+        Assert.assertTrue(cache.notContains(currencyName));
         cache.save(currencyName, currencyPrice);
-
         Assert.assertTrue(cache.contains(currencyName));
-        Assert.assertFalse(cache.notContains(currencyName));
 
         CurrencyResponse currencyResponse = cache.get(currencyName);
-        Assert.assertEquals(currencyPrice, currencyResponse.getPrice(), 1e-5);
+        Assert.assertEquals(currencyPrice, currencyResponse.price(), 1e-5);
     }
 
     /**
      * Тестирование инвалидации стоимости валюты из кэша при превышении периода обновления стоимости.
      * <ul>
      *     <li>Добавляет валюту в кэш</li>
-     *     <li>Ждёт 950 мс (чуть меньше периода обновления валюты)</li>
+     *     <li>Ждёт 90 мс (чуть меньше периода обновления валюты)</li>
      *     <li>Проверяет наличие валюты в кэше</li>
-     *     <li>Ждёт 70 мс</li>
+     *     <li>Ждёт 15 мс</li>
      *     <li>Проверяет отсутствие валюты в кэше</li>
      * </ul>
      */
@@ -62,10 +62,10 @@ public class CurrencyCacheTest {
 
         cache.save("currency", 0);
 
-        Thread.sleep(950);
+        Thread.sleep(90);
         Assert.assertTrue(cache.contains("currency"));
 
-        Thread.sleep(70);
+        Thread.sleep(15);
         Assert.assertFalse(cache.contains("currency"));
     }
 }

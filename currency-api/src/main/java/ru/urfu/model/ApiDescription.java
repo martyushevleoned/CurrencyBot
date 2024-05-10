@@ -10,7 +10,7 @@ public class ApiDescription {
     private final String updateTime;
 
     /**
-     * @param link       ссылка на оффициальную документацию
+     * @param link       ссылка на официальную документацию
      * @param updateTime период обновления стоимости валюты (Примеры: "1 день", "2 часа" и т.д.)
      */
     public ApiDescription(String apiName, String link, String updateTime) {
@@ -19,11 +19,10 @@ public class ApiDescription {
         this.updateTime = updateTime;
     }
 
-    @Override
-    public String toString() {
+    public String getDescription() {
         return """
                 API: %s.
-                Оффициальный сайт: %s.
+                Официальный сайт: %s.
                 Период обновления курса: %s.
                 """.formatted(apiName, link, updateTime);
     }

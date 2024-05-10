@@ -1,9 +1,13 @@
 package ru.urfu;
 
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.urfu.config.BotConfig;
 import ru.urfu.controller.UpdateController;
 
@@ -16,7 +20,9 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final BotConfig botConfig;
     private final UpdateController updateController;
 
+    @Autowired
     public TelegramBot(BotConfig botConfig, UpdateController updateController) {
+        super(botConfig.getToken());
         this.botConfig = botConfig;
         this.updateController = updateController;
     }
@@ -25,8 +31,9 @@ public class TelegramBot extends TelegramLongPollingBot {
      * Инициализировать {@link UpdateController}
      */
     @PostConstruct
-    private void init() {
-        updateController.registerTelegramBot(this);
+    private void init() throws TelegramApiException {
+        TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+        telegramBotsApi.registerBot(this);
     }
 
     /**
@@ -43,13 +50,5 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
         return botConfig.getName();
-    }
-
-    /**
-     * Получить токен бота
-     */
-    @Override
-    public String getBotToken() {
-        return botConfig.getToken();
     }
 }

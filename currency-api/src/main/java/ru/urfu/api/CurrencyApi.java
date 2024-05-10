@@ -1,5 +1,7 @@
 package ru.urfu.api;
 
+import ru.urfu.exceptions.ParseJsonException;
+import ru.urfu.exceptions.SendRequestException;
 import ru.urfu.model.CurrencyResponse;
 
 import java.util.Set;
@@ -26,6 +28,9 @@ public interface CurrencyApi {
 
     /**
      * Получить текущую стоимость валюты
+     *
+     * @throws SendRequestException если невозможно обратиться к API
+     * @throws ParseJsonException   если невозможно обработать ответ API
      */
-    CurrencyResponse getPrice(String currency);
+    CurrencyResponse getPrice(String currency) throws SendRequestException, ParseJsonException;
 }

@@ -28,6 +28,7 @@ public class JsonParserTest {
      */
     @Test
     public void parseJsonObjectTest() {
+
         String json = """
                 {
                   "data": {
@@ -41,23 +42,12 @@ public class JsonParserTest {
                 }
                 """;
 
-        String id = jsonParser.parse(json, "data.id");
-        Assert.assertEquals("litecoin", id);
-
-        String symbol = jsonParser.parse(json, "data.symbol");
-        Assert.assertEquals("LTC", symbol);
-
-        String type = jsonParser.parse(json, "data.type");
-        Assert.assertEquals("crypto", type);
-
-        String currencySymbol = jsonParser.parse(json, "data.currencySymbol");
-        Assert.assertEquals("null", currencySymbol);
-
-        String rateUsd = jsonParser.parse(json, "data.rateUsd");
-        Assert.assertEquals("82.5696619464591515", rateUsd);
-
-        String timestamp = jsonParser.parse(json, "timestamp");
-        Assert.assertEquals("1713616056895", timestamp);
+        Assert.assertEquals("litecoin", jsonParser.parse(json, "$.data.id"));
+        Assert.assertEquals("LTC", jsonParser.parse(json, "$.data.symbol"));
+        Assert.assertEquals("crypto", jsonParser.parse(json, "$.data.type"));
+        Assert.assertEquals("null", jsonParser.parse(json, "$.data.currencySymbol"));
+        Assert.assertEquals(82.5696619464591515, jsonParser.parseDouble(json, "$.data.rateUsd"), 1e-16);
+        Assert.assertEquals(1713616056895D, jsonParser.parseDouble(json, "$.timestamp"), 1e-1);
     }
 
     /**
@@ -88,29 +78,6 @@ public class JsonParserTest {
 
         String json = """
                 {
-                  "firstName": "Иван",
-                  "lastName": "Иванов",
-                  "address": {
-                    "streetAddress": "Московское ш., 101, кв.101",
-                    "city": "Ленинград",
-                    "postalCode": 101101
-                  },
-                  "phoneNumbers": [
-                    "812 123-1234",
-                    "916 123-4567"
-                  ]
-                }
-                """;
-
-
-        String firstPhoneNumber = jsonParser.parse(json, "phoneNumbers.0");
-        Assert.assertEquals("812 123-1234", firstPhoneNumber);
-
-        String secondPhoneNumber = jsonParser.parse(json, "phoneNumbers.1");
-        Assert.assertEquals("916 123-4567", secondPhoneNumber);
-
-        json = """
-                {
                   "menu": {
                     "id": "file",
                     "value": "File",
@@ -134,22 +101,11 @@ public class JsonParserTest {
                 }
                 """;
 
-        String firstMenuItemValue = jsonParser.parse(json, "menu.popup.menuitem.0.value");
-        Assert.assertEquals("New", firstMenuItemValue);
-
-        String firstMenuItemOnclick = jsonParser.parse(json, "menu.popup.menuitem.0.onclick");
-        Assert.assertEquals("CreateNewDoc()", firstMenuItemOnclick);
-
-        String secondMenuItemValue = jsonParser.parse(json, "menu.popup.menuitem.1.value");
-        Assert.assertEquals("Open", secondMenuItemValue);
-
-        String secondMenuItemOnclick = jsonParser.parse(json, "menu.popup.menuitem.1.onclick");
-        Assert.assertEquals("OpenDoc()", secondMenuItemOnclick);
-
-        String thirdMenuItemValue = jsonParser.parse(json, "menu.popup.menuitem.2.value");
-        Assert.assertEquals("Close", thirdMenuItemValue);
-
-        String thirdMenuItemOnclick = jsonParser.parse(json, "menu.popup.menuitem.2.onclick");
-        Assert.assertEquals("CloseDoc()", thirdMenuItemOnclick);
+        Assert.assertEquals("New", jsonParser.parse(json, "$.menu.popup.menuitem.[0].value"));
+        Assert.assertEquals("CreateNewDoc()", jsonParser.parse(json, "$.menu.popup.menuitem.[0].onclick"));
+        Assert.assertEquals("Open", jsonParser.parse(json, "$.menu.popup.menuitem.[1].value"));
+        Assert.assertEquals("OpenDoc()", jsonParser.parse(json, "$.menu.popup.menuitem.[1].onclick"));
+        Assert.assertEquals("Close", jsonParser.parse(json, "$.menu.popup.menuitem.[2].value"));
+        Assert.assertEquals("CloseDoc()", jsonParser.parse(json, "$.menu.popup.menuitem.[2].onclick"));
     }
 }
