@@ -24,8 +24,8 @@ public class JsonParser {
     public String parse(String json, String path) {
 
         try {
-            Object j = JsonPath.read(json, path);
-            return Objects.toString(j);
+            Object value = JsonPath.read(json, path);
+            return Objects.toString(value);
         } catch (InvalidPathException e) {
             throw new ParseJsonException("Недостижимый путь в json");
         }
