@@ -17,7 +17,7 @@ public class CurrencyCacheTest {
     private CurrencyCache cache;
 
     /**
-     * Пересоздать кэш перед каждым методом
+     * Пересоздать кэш
      */
     @Before
     public void setUp() {
@@ -39,10 +39,9 @@ public class CurrencyCacheTest {
         String currencyName = RandomStringUtils.random(10);
         double currencyPrice = new Random().nextDouble();
 
+        Assert.assertTrue(cache.notContains(currencyName));
         cache.save(currencyName, currencyPrice);
-
         Assert.assertTrue(cache.contains(currencyName));
-        Assert.assertFalse(cache.notContains(currencyName));
 
         CurrencyResponse currencyResponse = cache.get(currencyName);
         Assert.assertEquals(currencyPrice, currencyResponse.price(), 1e-5);

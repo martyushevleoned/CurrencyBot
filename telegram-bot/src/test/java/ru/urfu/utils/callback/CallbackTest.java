@@ -39,22 +39,22 @@ public class CallbackTest {
     @Test
     public void addRemoveContainsGetOptionTest() {
 
-        callback.addOption(Options.API_NAME, "api name");
-        Assert.assertTrue(callback.containsOption(Options.API_NAME));
-        Assert.assertEquals("api name", callback.getOption(Options.API_NAME));
+        callback.addOption(Option.API_NAME, "api name");
+        Assert.assertTrue(callback.containsOption(Option.API_NAME));
+        Assert.assertEquals("api name", callback.getOption(Option.API_NAME));
 
-        callback.addOption(Options.CURRENCY_NAME, "currency name");
-        Assert.assertTrue(callback.containsOption(Options.CURRENCY_NAME));
-        Assert.assertEquals("currency name", callback.getOption(Options.CURRENCY_NAME));
+        callback.addOption(Option.CURRENCY_NAME, "currency name");
+        Assert.assertTrue(callback.containsOption(Option.CURRENCY_NAME));
+        Assert.assertEquals("currency name", callback.getOption(Option.CURRENCY_NAME));
 
-        callback.removeOption(Options.API_NAME);
-        Assert.assertFalse(callback.containsOption(Options.API_NAME));
+        callback.removeOption(Option.API_NAME);
+        Assert.assertFalse(callback.containsOption(Option.API_NAME));
 
-        CallbackException e = Assert.assertThrows(CallbackException.class, () -> callback.getOption(Options.API_NAME));
+        CallbackException e = Assert.assertThrows(CallbackException.class, () -> callback.getOption(Option.API_NAME));
         Assert.assertEquals("Опция API_NAME отсутствует", e.getMessage());
 
-        Assert.assertTrue(callback.containsOption(Options.CURRENCY_NAME));
-        Assert.assertEquals("currency name", callback.getOption(Options.CURRENCY_NAME));
+        Assert.assertTrue(callback.containsOption(Option.CURRENCY_NAME));
+        Assert.assertEquals("currency name", callback.getOption(Option.CURRENCY_NAME));
     }
 
     /**
@@ -69,16 +69,16 @@ public class CallbackTest {
     @Test
     public void createCallbackFromCallbackQueryTest() {
 
-        callback.addOption(Options.MENU_NAME, "menu name");
-        callback.addOption(Options.CURRENCY_NAME, "currency name");
+        callback.addOption(Option.MENU_NAME, "menu name");
+        callback.addOption(Option.CURRENCY_NAME, "currency name");
 
         CallbackQuery callbackQuery = new CallbackQuery(null, null, null, null, callback.getData(), null, null);
         Callback callbackFromString = new Callback(callbackQuery);
 
-        Assert.assertTrue(callbackFromString.containsOption(Options.MENU_NAME));
-        Assert.assertTrue(callbackFromString.containsOption(Options.CURRENCY_NAME));
+        Assert.assertTrue(callbackFromString.containsOption(Option.MENU_NAME));
+        Assert.assertTrue(callbackFromString.containsOption(Option.CURRENCY_NAME));
 
-        Assert.assertEquals("menu name", callbackFromString.getOption(Options.MENU_NAME));
-        Assert.assertEquals("currency name", callbackFromString.getOption(Options.CURRENCY_NAME));
+        Assert.assertEquals("menu name", callbackFromString.getOption(Option.MENU_NAME));
+        Assert.assertEquals("currency name", callbackFromString.getOption(Option.CURRENCY_NAME));
     }
 }

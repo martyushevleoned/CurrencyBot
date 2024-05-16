@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import ru.urfu.controller.constant.Menus;
+import ru.urfu.controller.constant.MenuTypes;
 import ru.urfu.controller.constant.UserCommands;
 import ru.urfu.utils.callback.MultipageMenuCallback;
 
@@ -21,32 +21,32 @@ public class MainMenu implements CommandMenu, CallbackMenu {
 
     private final InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder()
             .keyboardRow(List.of(InlineKeyboardButton.builder()
-                    .text(Menus.CURRENCY_ADD_TO_TRACK_LIST.getText())
-                    .callbackData(new MultipageMenuCallback(Menus.CURRENCY_ADD_TO_TRACK_LIST).getData())
+                    .text(MenuTypes.CURRENCY_ADD_TO_TRACK_LIST.getText())
+                    .callbackData(new MultipageMenuCallback(MenuTypes.CURRENCY_ADD_TO_TRACK_LIST).getData())
                     .build()))
             .keyboardRow(List.of(InlineKeyboardButton.builder()
-                    .text(Menus.TRACKED_CURRENCY_LIST.getText())
-                    .callbackData(new MultipageMenuCallback(Menus.TRACKED_CURRENCY_LIST).getData())
+                    .text(MenuTypes.TRACKED_CURRENCY_LIST.getText())
+                    .callbackData(new MultipageMenuCallback(MenuTypes.TRACKED_CURRENCY_LIST).getData())
                     .build()))
             .build();
 
     @Override
-    public String getCommand() {
-        return UserCommands.START.getCommand();
+    public UserCommands getUserCommand() {
+        return UserCommands.START;
     }
 
     @Override
     public SendMessage formSendMessage(Message message) {
         return SendMessage.builder()
                 .chatId(message.getChatId())
-                .text(Menus.MAIN_MENU.getText())
+                .text(MenuTypes.MAIN_MENU.getText())
                 .replyMarkup(inlineKeyboardMarkup)
                 .build();
     }
 
     @Override
-    public Menus getMenu() {
-        return Menus.MAIN_MENU;
+    public MenuTypes getMenuType() {
+        return MenuTypes.MAIN_MENU;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class MainMenu implements CommandMenu, CallbackMenu {
         return EditMessageText.builder()
                 .chatId(callbackQuery.getMessage().getChatId())
                 .messageId(callbackQuery.getMessage().getMessageId())
-                .text(Menus.MAIN_MENU.getText())
+                .text(MenuTypes.MAIN_MENU.getText())
                 .replyMarkup(inlineKeyboardMarkup)
                 .build();
     }

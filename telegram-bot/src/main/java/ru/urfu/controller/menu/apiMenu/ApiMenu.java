@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.ApiService;
 import ru.urfu.controller.constant.ButtonsText;
-import ru.urfu.controller.constant.Menus;
+import ru.urfu.controller.constant.MenuTypes;
 import ru.urfu.controller.menu.CallbackMenu;
 import ru.urfu.utils.callback.ApiMenuCallback;
 import ru.urfu.utils.callback.MenuCallback;
@@ -25,7 +25,7 @@ public class ApiMenu implements CallbackMenu {
     private final InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder()
             .keyboardRow(List.of(InlineKeyboardButton.builder()
                     .text(ButtonsText.BACK.getText())
-                    .callbackData(new MenuCallback(Menus.API_LIST).getData())
+                    .callbackData(new MenuCallback(MenuTypes.API_LIST).getData())
                     .build()))
             .build();
 
@@ -35,14 +35,13 @@ public class ApiMenu implements CallbackMenu {
     }
 
     @Override
-    public Menus getMenu() {
-        return Menus.API;
+    public MenuTypes getMenuType() {
+        return MenuTypes.API;
     }
 
     @Override
     public EditMessageText formEditMessage(CallbackQuery callbackQuery) {
-        ApiMenuCallback callback = new ApiMenuCallback(callbackQuery);
-        String apiName = callback.getApiName();
+        String apiName = new ApiMenuCallback(callbackQuery).getApiName();
         String description = apiService.getDescription(apiName);
 
         return EditMessageText.builder()

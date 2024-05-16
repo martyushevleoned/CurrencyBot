@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 /**
  * Список всех опций использующихся в {@link Callback}
  */
-enum Options {
+enum Option {
 
     /**
      * Опция, для указания названия меню
@@ -49,7 +49,7 @@ enum Options {
      */
     private final String option;
 
-    Options(String option) {
+    Option(String option) {
         this.option = option;
     }
 

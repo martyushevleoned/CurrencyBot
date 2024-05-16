@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.ApiService;
-import ru.urfu.controller.constant.Menus;
+import ru.urfu.controller.constant.MenuTypes;
 import ru.urfu.controller.constant.UserCommands;
 import ru.urfu.controller.menu.CallbackMenu;
 import ru.urfu.controller.menu.CommandMenu;
@@ -32,9 +32,11 @@ public class ApiListMenu implements CommandMenu, CallbackMenu {
     @Autowired
     public ApiListMenu(ApiService apiService) {
         List<List<InlineKeyboardButton>> rows = new ArrayList<>();
-        apiService.getAllApiNames().stream().sorted().forEach(apiName -> {
+        apiService.getAllApiNames().stream()
+                .sorted()
+                .forEach(apiName -> {
 
-            ApiMenuCallback callback = new ApiMenuCallback(Menus.API, apiName);
+            ApiMenuCallback callback = new ApiMenuCallback(MenuTypes.API, apiName);
             rows.add(List.of(InlineKeyboardButton.builder()
                     .text(apiName)
                     .callbackData(callback.getData())
@@ -44,22 +46,22 @@ public class ApiListMenu implements CommandMenu, CallbackMenu {
     }
 
     @Override
-    public String getCommand() {
-        return UserCommands.API.getCommand();
+    public UserCommands getUserCommand() {
+        return UserCommands.API;
     }
 
     @Override
     public SendMessage formSendMessage(Message message) {
         return SendMessage.builder()
                 .chatId(message.getChatId())
-                .text(Menus.API_LIST.getText())
+                .text(MenuTypes.API_LIST.getText())
                 .replyMarkup(inlineKeyboardMarkup)
                 .build();
     }
 
     @Override
-    public Menus getMenu() {
-        return Menus.API_LIST;
+    public MenuTypes getMenuType() {
+        return MenuTypes.API_LIST;
     }
 
     @Override
@@ -67,7 +69,7 @@ public class ApiListMenu implements CommandMenu, CallbackMenu {
         return EditMessageText.builder()
                 .chatId(callbackQuery.getMessage().getChatId())
                 .messageId(callbackQuery.getMessage().getMessageId())
-                .text(Menus.API_LIST.getText())
+                .text(MenuTypes.API_LIST.getText())
                 .replyMarkup(inlineKeyboardMarkup)
                 .build();
     }

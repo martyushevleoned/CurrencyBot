@@ -3,6 +3,7 @@ package ru.urfu.utils.callback;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import ru.urfu.controller.constant.TelegramConstants;
 import ru.urfu.exceptions.CallbackException;
 
 import java.io.Serializable;
@@ -15,10 +16,10 @@ import java.util.Map;
  */
 class Callback implements Serializable {
 
-    private final Map<String, String> optionsMap;
+    private final Map<String, String> options;
 
     public Callback() {
-        optionsMap = new LinkedHashMap<>();
+        options = new LinkedHashMap<>();
     }
 
     /**
@@ -28,7 +29,7 @@ class Callback implements Serializable {
      *                      (обновление - нажатие на кнопку)
      */
     public Callback(CallbackQuery callbackQuery) {
-        optionsMap = JsonPath.parse(callbackQuery.getData()).read("$");
+        options = JsonPath.parse(callbackQuery.getData()).read("$");
     }
 
     /**
@@ -37,8 +38,8 @@ class Callback implements Serializable {
      * @param option опция
      * @param value  значение
      */
-    protected void addOption(Options option, String value) {
-        optionsMap.put(option.getOption(), value);
+    protected void addOption(Option option, String value) {
+        options.put(option.getOption(), value);
     }
 
     /**
@@ -46,8 +47,8 @@ class Callback implements Serializable {
      *
      * @param option опция
      */
-    protected void removeOption(Options option) {
-        optionsMap.remove(option.getOption());
+    protected void removeOption(Option option) {
+        options.remove(option.getOption());
     }
 
     /**
@@ -55,8 +56,8 @@ class Callback implements Serializable {
      *
      * @param option опция
      */
-    protected boolean containsOption(Options option) {
-        return optionsMap.containsKey(option.getOption());
+    protected boolean containsOption(Option option) {
+        return options.containsKey(option.getOption());
     }
 
     /**
@@ -65,9 +66,9 @@ class Callback implements Serializable {
      * @param option опция
      * @throws CallbackException если опция отсутствует
      */
-    protected String getOption(Options option) {
-        if (optionsMap.containsKey(option.getOption()))
-            return optionsMap.get(option.getOption());
+    protected String getOption(Option option) {
+        if (options.containsKey(option.getOption()))
+            return options.get(option.getOption());
         throw new CallbackException("Опция %s отсутствует".formatted(option.name()));
     }
 
@@ -77,9 +78,9 @@ class Callback implements Serializable {
      */
     public String getData() {
         DocumentContext documentContext = JsonPath.parse("{}");
-        optionsMap.forEach((k, v) -> documentContext.put("$", k, v));
+        options.forEach((option, value) -> documentContext.put("$", option, value));
         String json = documentContext.jsonString();
-        if (json.length() >= 60)
+        if (json.length() >= TelegramConstants.MAX_CALLBACK_DATA_LENGTH)
             throw new CallbackException("Превышен допустимый размер CallbackData");
         return json;
     }

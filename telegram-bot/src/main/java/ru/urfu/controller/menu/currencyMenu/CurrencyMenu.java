@@ -8,10 +8,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.ApiService;
 import ru.urfu.controller.constant.ButtonsText;
-import ru.urfu.controller.constant.Menus;
+import ru.urfu.controller.constant.MenuTypes;
 import ru.urfu.controller.menu.CallbackMenu;
 import ru.urfu.model.CurrencyRequest;
-import ru.urfu.model.CurrencyResponse;
 import ru.urfu.service.TrackService;
 import ru.urfu.utils.TextFormater;
 import ru.urfu.utils.callback.CurrencyRequestTrackMenuCallback;
@@ -39,21 +38,16 @@ public class CurrencyMenu implements CallbackMenu {
     }
 
     @Override
-    public Menus getMenu() {
-        return Menus.CURRENCY_ADD_TO_TRACK;
+    public MenuTypes getMenuType() {
+        return MenuTypes.CURRENCY_ADD_TO_TRACK;
     }
 
     @Override
     public EditMessageText formEditMessage(CallbackQuery callbackQuery) {
 
-        // параметры колбэка
         long chatId = callbackQuery.getMessage().getChatId();
-        int messageId = callbackQuery.getMessage().getMessageId();
-
-        // запрос
         CurrencyRequestTrackMenuCallback callback = new CurrencyRequestTrackMenuCallback(callbackQuery);
         CurrencyRequest currencyRequest = callback.getCurrencyRequest();
-        CurrencyResponse currencyResponse = apiService.getPrice(currencyRequest);
 
         // обработка опций
         if (callback.isAddToTrack()) {
@@ -62,13 +56,10 @@ public class CurrencyMenu implements CallbackMenu {
             trackService.removeFromTrack(chatId, currencyRequest);
         }
 
-        // текст меню
-        String text = textFormater.getPriceInfo(currencyRequest, currencyResponse);
-
         return EditMessageText.builder()
                 .chatId(chatId)
-                .messageId(messageId)
-                .text(text)
+                .messageId(callbackQuery.getMessage().getMessageId())
+                .text(textFormater.getPriceInfo(currencyRequest, apiService.getPrice(currencyRequest)))
                 .replyMarkup(getInlineKeyboardMarkup(chatId, currencyRequest))
                 .build();
     }
@@ -82,7 +73,7 @@ public class CurrencyMenu implements CallbackMenu {
     private InlineKeyboardMarkup getInlineKeyboardMarkup(long chatId, CurrencyRequest currencyRequest) {
 
         String addToTrackText;
-        CurrencyRequestTrackMenuCallback callback = new CurrencyRequestTrackMenuCallback(Menus.CURRENCY_ADD_TO_TRACK, currencyRequest);
+        CurrencyRequestTrackMenuCallback callback = new CurrencyRequestTrackMenuCallback(MenuTypes.CURRENCY_ADD_TO_TRACK, currencyRequest);
 
         if (trackService.isTracked(chatId, currencyRequest)) {
             addToTrackText = ButtonsText.REMOVE_FROM_TRACK.getText();
@@ -99,7 +90,7 @@ public class CurrencyMenu implements CallbackMenu {
                         .build()))
                 .keyboardRow(List.of(InlineKeyboardButton.builder()
                         .text(ButtonsText.BACK.getText())
-                        .callbackData(new MultipageMenuCallback(Menus.CURRENCY_ADD_TO_TRACK_LIST).getData())
+                        .callbackData(new MultipageMenuCallback(MenuTypes.CURRENCY_ADD_TO_TRACK_LIST).getData())
                         .build()))
                 .build();
     }

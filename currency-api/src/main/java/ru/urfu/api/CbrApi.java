@@ -60,9 +60,9 @@ public class CbrApi implements CurrencyApi {
         if (cache.notContains(currency)) {
             String response = requestSender.sendGetRequest(URL);
 
-            double usdPrice = Double.parseDouble(jsonParser.parse(response, "rates.USD"));
+            double usdPrice = jsonParser.parseDouble(response, "rates.USD");
             currencyPathMap.forEach((curr, path) -> {
-                double price = usdPrice / Double.parseDouble(jsonParser.parse(response, path));
+                double price = usdPrice / jsonParser.parseDouble(response, path);
                 cache.save(curr, price);
             });
         }

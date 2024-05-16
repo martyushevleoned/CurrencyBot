@@ -1,7 +1,7 @@
 package ru.urfu.utils.callback;
 
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import ru.urfu.controller.constant.Menus;
+import ru.urfu.controller.constant.MenuTypes;
 import ru.urfu.exceptions.CallbackException;
 import ru.urfu.model.CurrencyRequest;
 
@@ -10,9 +10,9 @@ import ru.urfu.model.CurrencyRequest;
  */
 public class CurrencyRequestMenuCallback extends ApiMenuCallback {
 
-    public CurrencyRequestMenuCallback(Menus menu, CurrencyRequest currencyRequest) {
+    public CurrencyRequestMenuCallback(MenuTypes menu, CurrencyRequest currencyRequest) {
         super(menu, currencyRequest.api());
-        addOption(Options.CURRENCY_NAME, currencyRequest.currency());
+        addOption(Option.CURRENCY_NAME, currencyRequest.currency());
     }
 
     /**
@@ -22,7 +22,7 @@ public class CurrencyRequestMenuCallback extends ApiMenuCallback {
      */
     public CurrencyRequestMenuCallback(CallbackQuery callbackQuery) {
         super(callbackQuery);
-        if (!containsOption(Options.CURRENCY_NAME))
+        if (!containsOption(Option.CURRENCY_NAME))
             throw new CallbackException("Отсутствует название валюты");
     }
 
@@ -31,8 +31,8 @@ public class CurrencyRequestMenuCallback extends ApiMenuCallback {
      */
     public CurrencyRequest getCurrencyRequest(){
         return new CurrencyRequest(
-                getOption(Options.API_NAME),
-                getOption(Options.CURRENCY_NAME)
+                getOption(Option.API_NAME),
+                getOption(Option.CURRENCY_NAME)
         );
     }
 }

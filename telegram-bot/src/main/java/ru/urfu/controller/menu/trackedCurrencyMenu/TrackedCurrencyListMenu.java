@@ -9,7 +9,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.controller.constant.ButtonsText;
-import ru.urfu.controller.constant.Menus;
+import ru.urfu.controller.constant.MenuTypes;
+import ru.urfu.controller.constant.TelegramConstants;
 import ru.urfu.controller.constant.UserCommands;
 import ru.urfu.controller.menu.CallbackMenu;
 import ru.urfu.controller.menu.CommandMenu;
@@ -44,8 +45,8 @@ public class TrackedCurrencyListMenu implements CommandMenu, CallbackMenu {
     }
 
     @Override
-    public String getCommand() {
-        return UserCommands.TRACK.getCommand();
+    public UserCommands getUserCommand() {
+        return UserCommands.TRACK;
     }
 
     @Override
@@ -53,27 +54,24 @@ public class TrackedCurrencyListMenu implements CommandMenu, CallbackMenu {
 
         return SendMessage.builder()
                 .chatId(message.getChatId())
-                .text(Menus.TRACKED_CURRENCY_LIST.getText())
+                .text(MenuTypes.TRACKED_CURRENCY_LIST.getText())
                 .replyMarkup(getInlineKeyboardMarkup(message.getChatId(), 0))
                 .build();
     }
 
     @Override
-    public Menus getMenu() {
-        return Menus.TRACKED_CURRENCY_LIST;
+    public MenuTypes getMenuType() {
+        return MenuTypes.TRACKED_CURRENCY_LIST;
     }
 
     @Override
     public EditMessageText formEditMessage(CallbackQuery callbackQuery) {
 
-        MultipageMenuCallback callback = new MultipageMenuCallback(callbackQuery);
-        int pageIndex = callback.getPageIndex();
-
         return EditMessageText.builder()
                 .chatId(callbackQuery.getMessage().getChatId())
                 .messageId(callbackQuery.getMessage().getMessageId())
-                .text(Menus.TRACKED_CURRENCY_LIST.getText())
-                .replyMarkup(getInlineKeyboardMarkup(callbackQuery.getMessage().getChatId(), pageIndex))
+                .text(MenuTypes.TRACKED_CURRENCY_LIST.getText())
+                .replyMarkup(getInlineKeyboardMarkup(callbackQuery.getMessage().getChatId(), new MultipageMenuCallback(callbackQuery).getPageIndex()))
                 .build();
     }
 
@@ -84,11 +82,17 @@ public class TrackedCurrencyListMenu implements CommandMenu, CallbackMenu {
      * @param pageIndex индекс страницы
      */
     private InlineKeyboardMarkup getInlineKeyboardMarkup(long chatId, int pageIndex) {
-        List<InlineKeyboardButton> buttons = getTrackedButtons(chatId);
-        List<List<InlineKeyboardButton>> rows = new ArrayList<>(multiPageKeyboard.getPage(pageIndex, buttons, Menus.TRACKED_CURRENCY_LIST, 9));
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>(
+                multiPageKeyboard.getPage(
+                        pageIndex,
+                        getTrackedButtons(chatId),
+                        MenuTypes.TRACKED_CURRENCY_LIST,
+                        TelegramConstants.MAX_COUNT_OF_ROWS
+                )
+        );
         rows.add(List.of(InlineKeyboardButton.builder()
                 .text(ButtonsText.BACK.getText())
-                .callbackData(new MenuCallback(Menus.MAIN_MENU).getData()).build()));
+                .callbackData(new MenuCallback(MenuTypes.MAIN_MENU).getData()).build()));
         return new InlineKeyboardMarkup(rows);
     }
 
@@ -99,13 +103,12 @@ public class TrackedCurrencyListMenu implements CommandMenu, CallbackMenu {
      */
     private List<InlineKeyboardButton> getTrackedButtons(long chatId) {
         return trackService.getTrackedRequests(chatId).stream()
-                .map(currencyRequest -> {
-                    CurrencyRequestMenuCallback callback = new CurrencyRequestMenuCallback(Menus.TRACKED_CURRENCY, currencyRequest);
-                    return InlineKeyboardButton.builder()
-                            .text(textFormater.getCurrencyInfo(currencyRequest))
-                            .callbackData(callback.getData())
-                            .build();
-                })
+                .map(currencyRequest ->
+                        InlineKeyboardButton.builder()
+                                .text(textFormater.getCurrencyInfo(currencyRequest))
+                                .callbackData(new CurrencyRequestMenuCallback(MenuTypes.TRACKED_CURRENCY, currencyRequest).getData())
+                                .build()
+                )
                 .sorted(Comparator.comparing(InlineKeyboardButton::getText))
                 .toList();
     }

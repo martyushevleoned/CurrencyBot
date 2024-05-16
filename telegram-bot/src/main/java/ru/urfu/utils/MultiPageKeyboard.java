@@ -3,7 +3,7 @@ package ru.urfu.utils;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.controller.constant.ButtonsText;
-import ru.urfu.controller.constant.Menus;
+import ru.urfu.controller.constant.MenuTypes;
 import ru.urfu.utils.callback.MultipageMenuCallback;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class MultiPageKeyboard {
      * @param rowsCount количество строк выделяемых под многостраничную часть меню
      * @return строки InlineKeyboardButton
      */
-    public List<List<InlineKeyboardButton>> getPage(int pageIndex, List<InlineKeyboardButton> buttons, Menus menu, int rowsCount) {
+    public List<List<InlineKeyboardButton>> getPage(int pageIndex, List<InlineKeyboardButton> buttons, MenuTypes menu, int rowsCount) {
 
         // расчёт количества страниц
         int countOfUsefulButtonsInPage = rowsCount - 1;

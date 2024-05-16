@@ -3,7 +3,7 @@ package ru.urfu.utils.callback;
 import org.junit.Assert;
 import org.junit.Test;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import ru.urfu.controller.constant.Menus;
+import ru.urfu.controller.constant.MenuTypes;
 import ru.urfu.exceptions.CallbackException;
 import ru.urfu.model.CurrencyRequest;
 
@@ -25,13 +25,13 @@ public class MenuCallbackTest {
     @Test
     public void getMenuNameTest() {
 
-        MenuCallback menuCallback = new MenuCallback(Menus.MAIN_MENU);
-        Assert.assertEquals(Menus.MAIN_MENU.getMenuName(), menuCallback.getMenuName());
+        MenuCallback menuCallback = new MenuCallback(MenuTypes.MAIN_MENU);
+        Assert.assertEquals(MenuTypes.MAIN_MENU.getMenuName(), menuCallback.getMenuName());
 
         CallbackQuery callbackQuery = new CallbackQuery(null, null, null, null, menuCallback.getData(), null, null);
         MenuCallback menuCallbackFromString = new MenuCallback(callbackQuery);
 
-        Assert.assertEquals(Menus.MAIN_MENU.getMenuName(), menuCallbackFromString.getMenuName());
+        Assert.assertEquals(MenuTypes.MAIN_MENU.getMenuName(), menuCallbackFromString.getMenuName());
     }
 
     /**
@@ -50,17 +50,17 @@ public class MenuCallbackTest {
     @Test
     public void getChildMenuNameTest() {
 
-        ApiMenuCallback apiMenuCallback = new ApiMenuCallback(Menus.API_LIST, "api name");
+        ApiMenuCallback apiMenuCallback = new ApiMenuCallback(MenuTypes.API_LIST, "api name");
         CallbackQuery callbackQuery = new CallbackQuery(null, null, null, null, apiMenuCallback.getData(), null, null);
 
         MenuCallback menuCallbackFromString = new MenuCallback(callbackQuery);
-        Assert.assertEquals(Menus.API_LIST.getMenuName(), menuCallbackFromString.getMenuName());
+        Assert.assertEquals(MenuTypes.API_LIST.getMenuName(), menuCallbackFromString.getMenuName());
 
-        CurrencyRequestMenuCallback currencyRequestMenuCallback = new CurrencyRequestMenuCallback(Menus.TRACKED_CURRENCY, new CurrencyRequest("api", "currency"));
+        CurrencyRequestMenuCallback currencyRequestMenuCallback = new CurrencyRequestMenuCallback(MenuTypes.TRACKED_CURRENCY, new CurrencyRequest("api", "currency"));
         callbackQuery = new CallbackQuery(null, null, null, null, currencyRequestMenuCallback.getData(), null, null);
 
         menuCallbackFromString = new MenuCallback(callbackQuery);
-        Assert.assertEquals(Menus.TRACKED_CURRENCY.getMenuName(), menuCallbackFromString.getMenuName());
+        Assert.assertEquals(MenuTypes.TRACKED_CURRENCY.getMenuName(), menuCallbackFromString.getMenuName());
     }
 
     /**
@@ -76,7 +76,7 @@ public class MenuCallbackTest {
     public void getCorruptedMenuName() {
 
         Callback callback = new Callback();
-        callback.addOption(Options.CURRENCY_NAME, "currency");
+        callback.addOption(Option.CURRENCY_NAME, "currency");
         CallbackQuery callbackQuery = new CallbackQuery(null, null, null, null, callback.getData(), null, null);
 
         CallbackException callbackException = Assert.assertThrows(CallbackException.class, () -> new MenuCallback(callbackQuery));

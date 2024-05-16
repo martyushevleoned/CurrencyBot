@@ -1,7 +1,7 @@
 package ru.urfu.utils.callback;
 
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import ru.urfu.controller.constant.Menus;
+import ru.urfu.controller.constant.MenuTypes;
 import ru.urfu.model.CurrencyRequest;
 
 /**
@@ -10,7 +10,7 @@ import ru.urfu.model.CurrencyRequest;
  */
 public class CurrencyRequestTrackMenuCallback extends CurrencyRequestMenuCallback {
 
-    public CurrencyRequestTrackMenuCallback(Menus menu, CurrencyRequest currencyRequest) {
+    public CurrencyRequestTrackMenuCallback(MenuTypes menu, CurrencyRequest currencyRequest) {
         super(menu, currencyRequest);
     }
 
@@ -26,27 +26,27 @@ public class CurrencyRequestTrackMenuCallback extends CurrencyRequestMenuCallbac
      * Добавить флаг для добавления валюты в список отслеживаемых
      */
     public void addAddToTrackFlag() {
-        addOption(Options.ADD_TO_TRACK, null);
+        addOption(Option.ADD_TO_TRACK, null);
     }
 
     /**
      * Добавить флаг для удаления валюты из списка отслеживаемых
      */
     public void addRemoveFromTrackFlag() {
-        addOption(Options.REMOVE_FROM_TRACK, null);
+        addOption(Option.REMOVE_FROM_TRACK, null);
     }
 
     /**
      * Есть ли флаг добавления валюты в список отслеживаемых
      */
     public boolean isAddToTrack() {
-        return containsOption(Options.ADD_TO_TRACK);
+        return containsOption(Option.ADD_TO_TRACK);
     }
 
     /**
      * Есть ли флаг удаления валюты из списка отслеживаемых
      */
     public boolean isRemoveFromTrack() {
-        return containsOption(Options.REMOVE_FROM_TRACK);
+        return containsOption(Option.REMOVE_FROM_TRACK);
     }
 }

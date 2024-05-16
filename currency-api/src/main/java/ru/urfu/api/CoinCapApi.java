@@ -61,7 +61,7 @@ public class CoinCapApi implements CurrencyApi {
             String url = currencyUrlMap.get(currency);
             String response = requestSender.sendGetRequest(url);
 
-            double price = Double.parseDouble(jsonParser.parse(response, "$.data.rateUsd"));
+            double price = jsonParser.parseDouble(response, "$.data.rateUsd");
             cache.save(currency, price);
         }
 

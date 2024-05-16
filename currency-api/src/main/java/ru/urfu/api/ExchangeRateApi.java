@@ -64,7 +64,7 @@ public class ExchangeRateApi implements CurrencyApi {
             String response = requestSender.sendGetRequest(URL);
 
             currencyPathMap.forEach((curr, path) -> {
-                double price = 1 / Double.parseDouble(jsonParser.parse(response, path));
+                double price = 1 / jsonParser.parseDouble(response, path);
                 cache.save(curr, price);
             });
         }

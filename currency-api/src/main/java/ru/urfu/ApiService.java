@@ -52,7 +52,6 @@ public class ApiService {
      * Получить стоимость валюты на основе названия API и валюты
      *
      * @param currencyRequest запрос с информацией о запрашиваемой валюте и названием API
-     * @return {@link CurrencyResponse} содержащий стоимость валюты и время получения стоимости
      * @throws ApiNotFoundException если API не существует
      * @throws ApiNotSupportedCurrencyException если API не поддерживает валюту
      */

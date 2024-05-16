@@ -1,7 +1,7 @@
 package ru.urfu.utils.callback;
 
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import ru.urfu.controller.constant.Menus;
+import ru.urfu.controller.constant.MenuTypes;
 import ru.urfu.exceptions.CallbackException;
 
 /**
@@ -9,9 +9,9 @@ import ru.urfu.exceptions.CallbackException;
  */
 public class MenuCallback extends Callback {
 
-    public MenuCallback(Menus menu) {
+    public MenuCallback(MenuTypes menu) {
         super();
-        addOption(Options.MENU_NAME, menu.getMenuName());
+        addOption(Option.MENU_NAME, menu.getMenuName());
     }
 
     /**
@@ -21,7 +21,7 @@ public class MenuCallback extends Callback {
      */
     public MenuCallback(CallbackQuery callbackQuery) {
         super(callbackQuery);
-        if (!containsOption(Options.MENU_NAME))
+        if (!containsOption(Option.MENU_NAME))
             throw new CallbackException("Отсутствует название меню");
     }
 
@@ -29,6 +29,6 @@ public class MenuCallback extends Callback {
      * Получить название меню
      */
     public String getMenuName() {
-        return getOption(Options.MENU_NAME);
+        return getOption(Option.MENU_NAME);
     }
 }

@@ -24,10 +24,25 @@ public class JsonParser {
     public String parse(String json, String path) {
 
         try {
-            Object value = JsonPath.read(json, path);
-            return Objects.toString(value);
+            return Objects.toString(JsonPath.read(json, path));
         } catch (InvalidPathException e) {
             throw new ParseJsonException("Недостижимый путь в json");
+        }
+    }
+
+    /**
+     * Получить значение из json по указанному пути
+     *
+     * @param json представление json в виде строки. Допускает содержание пробелов и переносов строк
+     * @param path путь до значения в формате: $.поле1.[индекс2].поле3
+     * @throws ParseJsonException если путь в json недостижим
+     * @throws ParseJsonException если поле не может быть приведено к double
+     */
+    public double parseDouble(String json, String path) {
+        try {
+            return Double.parseDouble(parse(json, path));
+        } catch (NumberFormatException e) {
+            throw new ParseJsonException("Поле не может быть приведено к double");
         }
     }
 }

@@ -1,7 +1,7 @@
 package ru.urfu.utils.callback;
 
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import ru.urfu.controller.constant.Menus;
+import ru.urfu.controller.constant.MenuTypes;
 import ru.urfu.model.CurrencyRequest;
 
 /**
@@ -9,7 +9,7 @@ import ru.urfu.model.CurrencyRequest;
  */
 public class CurrencyRequestFlagMenuCallback extends CurrencyRequestMenuCallback {
 
-    public CurrencyRequestFlagMenuCallback(Menus menu, CurrencyRequest currencyRequest) {
+    public CurrencyRequestFlagMenuCallback(MenuTypes menu, CurrencyRequest currencyRequest) {
         super(menu, currencyRequest);
     }
 
@@ -25,9 +25,9 @@ public class CurrencyRequestFlagMenuCallback extends CurrencyRequestMenuCallback
      * Инвертировать флаг
      */
     public void invertFlag() {
-        if (containsOption(Options.CONTAINS))
-            removeOption(Options.CONTAINS);
+        if (containsOption(Option.CONTAINS))
+            removeOption(Option.CONTAINS);
         else
-            addOption(Options.CONTAINS, null);
+            addOption(Option.CONTAINS, null);
     }
 }

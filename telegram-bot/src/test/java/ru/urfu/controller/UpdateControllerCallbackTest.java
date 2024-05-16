@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.urfu.ApiService;
-import ru.urfu.controller.constant.Menus;
+import ru.urfu.controller.constant.MenuTypes;
 import ru.urfu.controller.menu.MainMenu;
 import ru.urfu.controller.menu.apiMenu.ApiListMenu;
 import ru.urfu.controller.menu.currencyMenu.CurrencyListMenu;
@@ -87,7 +87,7 @@ public class UpdateControllerCallbackTest {
     @Test
     public void mainMenuCallbackTest() throws TelegramApiException {
 
-        Update update = generateCallbackUpdate(1L, 2, new MenuCallback(Menus.MAIN_MENU).getData());
+        Update update = generateCallbackUpdate(1L, 2, new MenuCallback(MenuTypes.MAIN_MENU).getData());
         updateController.processUpdate(update);
 
         Mockito.verify(sender, Mockito.times(1)).execute(Mockito.eq(EditMessageText.builder()
@@ -97,11 +97,11 @@ public class UpdateControllerCallbackTest {
                 .replyMarkup(InlineKeyboardMarkup.builder()
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text("Все валюты")
-                                .callbackData(new MultipageMenuCallback(Menus.CURRENCY_ADD_TO_TRACK_LIST).getData())
+                                .callbackData(new MultipageMenuCallback(MenuTypes.CURRENCY_ADD_TO_TRACK_LIST).getData())
                                 .build()))
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text("Отслеживаемые валюты")
-                                .callbackData(new MultipageMenuCallback(Menus.TRACKED_CURRENCY_LIST).getData())
+                                .callbackData(new MultipageMenuCallback(MenuTypes.TRACKED_CURRENCY_LIST).getData())
                                 .build()))
                         .build()).build()));
     }
@@ -123,7 +123,7 @@ public class UpdateControllerCallbackTest {
     @Test
     public void trackedCurrencyListMenuCallbackTest() throws TelegramApiException {
 
-        Update update = generateCallbackUpdate(2L, 3, new MultipageMenuCallback(Menus.TRACKED_CURRENCY_LIST).getData());
+        Update update = generateCallbackUpdate(2L, 3, new MultipageMenuCallback(MenuTypes.TRACKED_CURRENCY_LIST).getData());
         updateController.processUpdate(update);
 
         Mockito.verify(sender, Mockito.times(1)).execute(Mockito.eq(EditMessageText.builder()
@@ -133,15 +133,15 @@ public class UpdateControllerCallbackTest {
                 .replyMarkup(InlineKeyboardMarkup.builder()
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text(textFormater.getCurrencyInfo(firstCurrencyRequest))
-                                .callbackData(new CurrencyRequestMenuCallback(Menus.TRACKED_CURRENCY, firstCurrencyRequest).getData())
+                                .callbackData(new CurrencyRequestMenuCallback(MenuTypes.TRACKED_CURRENCY, firstCurrencyRequest).getData())
                                 .build()))
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text(textFormater.getCurrencyInfo(secondCurrencyRequest))
-                                .callbackData(new CurrencyRequestMenuCallback(Menus.TRACKED_CURRENCY, secondCurrencyRequest).getData())
+                                .callbackData(new CurrencyRequestMenuCallback(MenuTypes.TRACKED_CURRENCY, secondCurrencyRequest).getData())
                                 .build()))
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text("Назад")
-                                .callbackData(new MenuCallback(Menus.MAIN_MENU).getData())
+                                .callbackData(new MenuCallback(MenuTypes.MAIN_MENU).getData())
                                 .build()))
                         .build()).build()));
     }
@@ -163,7 +163,7 @@ public class UpdateControllerCallbackTest {
     @Test
     public void currencyListMenuCallbackTest() throws TelegramApiException {
 
-        Update update = generateCallbackUpdate(3L, 4, new MultipageMenuCallback(Menus.CURRENCY_ADD_TO_TRACK_LIST).getData());
+        Update update = generateCallbackUpdate(3L, 4, new MultipageMenuCallback(MenuTypes.CURRENCY_ADD_TO_TRACK_LIST).getData());
         updateController.processUpdate(update);
 
         Mockito.verify(sender, Mockito.times(1)).execute(Mockito.eq(EditMessageText.builder()
@@ -173,15 +173,15 @@ public class UpdateControllerCallbackTest {
                 .replyMarkup(InlineKeyboardMarkup.builder()
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text(textFormater.getCurrencyInfo(firstCurrencyRequest))
-                                .callbackData(new CurrencyRequestMenuCallback(Menus.CURRENCY_ADD_TO_TRACK, firstCurrencyRequest).getData())
+                                .callbackData(new CurrencyRequestMenuCallback(MenuTypes.CURRENCY_ADD_TO_TRACK, firstCurrencyRequest).getData())
                                 .build()))
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text(textFormater.getCurrencyInfo(secondCurrencyRequest))
-                                .callbackData(new CurrencyRequestMenuCallback(Menus.CURRENCY_ADD_TO_TRACK, secondCurrencyRequest).getData())
+                                .callbackData(new CurrencyRequestMenuCallback(MenuTypes.CURRENCY_ADD_TO_TRACK, secondCurrencyRequest).getData())
                                 .build()))
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text("Назад")
-                                .callbackData(new MenuCallback(Menus.MAIN_MENU).getData())
+                                .callbackData(new MenuCallback(MenuTypes.MAIN_MENU).getData())
                                 .build()))
                         .build()).build()));
     }
@@ -203,7 +203,7 @@ public class UpdateControllerCallbackTest {
     @Test
     public void apiListMenuCallbackTest() throws TelegramApiException {
 
-        Update update = generateCallbackUpdate(4L, 5, new MenuCallback(Menus.API_LIST).getData());
+        Update update = generateCallbackUpdate(4L, 5, new MenuCallback(MenuTypes.API_LIST).getData());
         updateController.processUpdate(update);
 
         Mockito.verify(sender, Mockito.times(1)).execute(Mockito.eq(EditMessageText.builder()
@@ -213,11 +213,11 @@ public class UpdateControllerCallbackTest {
                 .replyMarkup(InlineKeyboardMarkup.builder()
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text(firstCurrencyRequest.api())
-                                .callbackData(new ApiMenuCallback(Menus.API, firstCurrencyRequest.api()).getData())
+                                .callbackData(new ApiMenuCallback(MenuTypes.API, firstCurrencyRequest.api()).getData())
                                 .build()))
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text(secondCurrencyRequest.api())
-                                .callbackData(new ApiMenuCallback(Menus.API, secondCurrencyRequest.api()).getData())
+                                .callbackData(new ApiMenuCallback(MenuTypes.API, secondCurrencyRequest.api()).getData())
                                 .build()))
                         .build()).build()));
     }

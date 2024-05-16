@@ -10,7 +10,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.ApiService;
 import ru.urfu.controller.constant.ButtonsText;
-import ru.urfu.controller.constant.Menus;
+import ru.urfu.controller.constant.MenuTypes;
+import ru.urfu.controller.constant.TelegramConstants;
 import ru.urfu.controller.constant.UserCommands;
 import ru.urfu.controller.menu.CallbackMenu;
 import ru.urfu.controller.menu.CommandMenu;
@@ -42,11 +43,10 @@ public class CurrencyListMenu implements CommandMenu, CallbackMenu {
     /**
      * Инициализировать список клавиатур для многостраничного меню
      */
-    private List<InlineKeyboardMarkup> initKeyboard(ApiService apiService,
-                                                    MultiPageKeyboard multiPageKeyboard){
+    private List<InlineKeyboardMarkup> initKeyboard(ApiService apiService, MultiPageKeyboard multiPageKeyboard) {
         List<InlineKeyboardButton> buttons = apiService.getPossibleRequests().stream()
                 .map(currencyRequest -> {
-                    CurrencyRequestMenuCallback callback = new CurrencyRequestMenuCallback(Menus.CURRENCY_ADD_TO_TRACK, currencyRequest);
+                    CurrencyRequestMenuCallback callback = new CurrencyRequestMenuCallback(MenuTypes.CURRENCY_ADD_TO_TRACK, currencyRequest);
                     return InlineKeyboardButton.builder()
                             .text(textFormater.getCurrencyInfo(currencyRequest))
                             .callbackData(callback.getData())
@@ -55,51 +55,50 @@ public class CurrencyListMenu implements CommandMenu, CallbackMenu {
                 .sorted(Comparator.comparing(InlineKeyboardButton::getText))
                 .toList();
 
-        int keyboardMarkupsCount = multiPageKeyboard.getCountOfPages(buttons.size(), 9);
+        // -1 это запас для кнопки "назад"
+        int keyboardMarkupsCount = multiPageKeyboard.getCountOfPages(buttons.size(), TelegramConstants.MAX_COUNT_OF_ROWS - 1);
         List<InlineKeyboardMarkup> keyboardMarkups = new ArrayList<>();
 
         for (int i = 0; i < keyboardMarkupsCount; i++) {
-            List<List<InlineKeyboardButton>> rows = new ArrayList<>(10);
-            rows.addAll(multiPageKeyboard.getPage(i, buttons, Menus.CURRENCY_ADD_TO_TRACK_LIST, 9));
+            List<List<InlineKeyboardButton>> rows = new ArrayList<>(
+                    multiPageKeyboard.getPage(i, buttons, MenuTypes.CURRENCY_ADD_TO_TRACK_LIST, TelegramConstants.MAX_COUNT_OF_ROWS - 1)
+            );
             rows.add(List.of(InlineKeyboardButton.builder()
                     .text(ButtonsText.BACK.getText())
-                    .callbackData(new MenuCallback(Menus.MAIN_MENU).getData()).build()));
+                    .callbackData(new MenuCallback(MenuTypes.MAIN_MENU).getData())
+                    .build()));
             keyboardMarkups.add(new InlineKeyboardMarkup(rows));
         }
 
-         return Collections.unmodifiableList(keyboardMarkups);
+        return Collections.unmodifiableList(keyboardMarkups);
     }
 
     @Override
-    public String getCommand() {
-        return UserCommands.CURRENCIES.getCommand();
+    public UserCommands getUserCommand() {
+        return UserCommands.CURRENCIES;
     }
 
     @Override
     public SendMessage formSendMessage(Message message) {
         return SendMessage.builder()
                 .chatId(message.getChatId())
-                .text(Menus.CURRENCY_ADD_TO_TRACK_LIST.getText())
+                .text(MenuTypes.CURRENCY_ADD_TO_TRACK_LIST.getText())
                 .replyMarkup(inlineKeyboardMarkups.get(0))
                 .build();
     }
 
     @Override
-    public Menus getMenu() {
-        return Menus.CURRENCY_ADD_TO_TRACK_LIST;
+    public MenuTypes getMenuType() {
+        return MenuTypes.CURRENCY_ADD_TO_TRACK_LIST;
     }
 
     @Override
     public EditMessageText formEditMessage(CallbackQuery callbackQuery) {
-
-        MultipageMenuCallback callback = new MultipageMenuCallback(callbackQuery);
-        int pageIndex = callback.getPageIndex();
-
         return EditMessageText.builder()
                 .chatId(callbackQuery.getMessage().getChatId())
                 .messageId(callbackQuery.getMessage().getMessageId())
-                .text(Menus.CURRENCY_ADD_TO_TRACK_LIST.getText())
-                .replyMarkup(inlineKeyboardMarkups.get(pageIndex))
+                .text(MenuTypes.CURRENCY_ADD_TO_TRACK_LIST.getText())
+                .replyMarkup(inlineKeyboardMarkups.get(new MultipageMenuCallback(callbackQuery).getPageIndex()))
                 .build();
     }
 }

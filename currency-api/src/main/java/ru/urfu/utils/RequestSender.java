@@ -22,7 +22,7 @@ public class RequestSender {
      *
      * @param url адрес, по которому нужно отправить запрос
      * @return тело отклика, если отклик не получен возвращает null
-     * @throws SendRequestException если невозможно получить тело отклика
+     * @throws SendRequestException если невозможно получить тело отклика или возникла ошибка при выполнении запроса
      */
     public String sendGetRequest(String url) {
         Request request = new Request.Builder().url(url).build();
