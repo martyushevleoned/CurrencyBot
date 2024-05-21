@@ -5,7 +5,7 @@ import ru.urfu.exceptions.*;
 /**
  * Тексты сообщений, отправляемых пользователю при возникновении исключений
  */
-public enum ErrorMessageForUser {
+public enum ErrorMessage {
 
     /**
      * Текст сообщения, отправляемого пользователю при вызове {@link ApiNotFoundException}
@@ -37,7 +37,7 @@ public enum ErrorMessageForUser {
      */
     private final String text;
 
-    ErrorMessageForUser(String text) {
+    ErrorMessage(String text) {
         this.text = text;
     }
 

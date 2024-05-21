@@ -2,7 +2,7 @@ package ru.urfu.controller.menu;
 
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import ru.urfu.controller.constant.MenuTypes;
+import ru.urfu.controller.constant.MenuType;
 
 /**
  * Меню вызываемое по нажатию кнопки
@@ -10,9 +10,9 @@ import ru.urfu.controller.constant.MenuTypes;
 public interface CallbackMenu {
 
     /**
-     * Получить {@link MenuTypes тип меню}
+     * Получить {@link MenuType тип меню}
      */
-    MenuTypes getMenuType();
+    MenuType getMenuType();
 
     /**
      * Формирует изменённое меню для отправки

@@ -3,9 +3,9 @@ package ru.urfu.controller.constant;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 /**
- * Типы меню
+ * Тип меню
  */
-public enum MenuTypes {
+public enum MenuType {
 
     /**
      * Главное меню
@@ -54,7 +54,7 @@ public enum MenuTypes {
      */
     private final String text;
 
-    MenuTypes(String menuName, String text) {
+    MenuType(String menuName, String text) {
         this.menuName = menuName;
         this.text = text;
     }

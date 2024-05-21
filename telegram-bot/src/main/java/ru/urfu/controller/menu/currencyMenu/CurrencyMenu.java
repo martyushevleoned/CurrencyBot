@@ -7,8 +7,8 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.ApiService;
-import ru.urfu.controller.constant.ButtonsText;
-import ru.urfu.controller.constant.MenuTypes;
+import ru.urfu.controller.constant.ButtonText;
+import ru.urfu.controller.constant.MenuType;
 import ru.urfu.controller.menu.CallbackMenu;
 import ru.urfu.model.CurrencyRequest;
 import ru.urfu.service.TrackService;
@@ -38,8 +38,8 @@ public class CurrencyMenu implements CallbackMenu {
     }
 
     @Override
-    public MenuTypes getMenuType() {
-        return MenuTypes.CURRENCY_ADD_TO_TRACK;
+    public MenuType getMenuType() {
+        return MenuType.CURRENCY_ADD_TO_TRACK;
     }
 
     @Override
@@ -73,13 +73,13 @@ public class CurrencyMenu implements CallbackMenu {
     private InlineKeyboardMarkup getInlineKeyboardMarkup(long chatId, CurrencyRequest currencyRequest) {
 
         String addToTrackText;
-        CurrencyRequestTrackMenuCallback callback = new CurrencyRequestTrackMenuCallback(MenuTypes.CURRENCY_ADD_TO_TRACK, currencyRequest);
+        CurrencyRequestTrackMenuCallback callback = new CurrencyRequestTrackMenuCallback(MenuType.CURRENCY_ADD_TO_TRACK, currencyRequest);
 
         if (trackService.isTracked(chatId, currencyRequest)) {
-            addToTrackText = ButtonsText.REMOVE_FROM_TRACK.getText();
+            addToTrackText = ButtonText.REMOVE_FROM_TRACK.getText();
             callback.addRemoveFromTrackFlag();
         } else {
-            addToTrackText = ButtonsText.ADD_TO_TRACK.getText();
+            addToTrackText = ButtonText.ADD_TO_TRACK.getText();
             callback.addAddToTrackFlag();
         }
 
@@ -89,8 +89,8 @@ public class CurrencyMenu implements CallbackMenu {
                         .callbackData(callback.getData())
                         .build()))
                 .keyboardRow(List.of(InlineKeyboardButton.builder()
-                        .text(ButtonsText.BACK.getText())
-                        .callbackData(new MultipageMenuCallback(MenuTypes.CURRENCY_ADD_TO_TRACK_LIST).getData())
+                        .text(ButtonText.BACK.getText())
+                        .callbackData(new MultipageMenuCallback(MenuType.CURRENCY_ADD_TO_TRACK_LIST).getData())
                         .build()))
                 .build();
     }

@@ -1,9 +1,7 @@
 package ru.urfu.exceptions;
 
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-
 /**
- * Ошибка парсинга {@link CallbackQuery}
+ * Ошибка создания {@link ru.urfu.utils.callback.Callback}
  */
 public class CallbackException extends RuntimeException {
     public CallbackException(String message) {

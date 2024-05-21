@@ -2,8 +2,8 @@ package ru.urfu.utils;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import ru.urfu.controller.constant.ButtonsText;
-import ru.urfu.controller.constant.MenuTypes;
+import ru.urfu.controller.constant.ButtonText;
+import ru.urfu.controller.constant.MenuType;
 import ru.urfu.utils.callback.MultipageMenuCallback;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class MultiPageKeyboard {
      * @param rowsCount количество строк выделяемых под многостраничную часть меню
      * @return строки InlineKeyboardButton
      */
-    public List<List<InlineKeyboardButton>> getPage(int pageIndex, List<InlineKeyboardButton> buttons, MenuTypes menu, int rowsCount) {
+    public List<List<InlineKeyboardButton>> getPage(int pageIndex, List<InlineKeyboardButton> buttons, MenuType menu, int rowsCount) {
 
         // расчёт количества страниц
         int countOfUsefulButtonsInPage = rowsCount - 1;
@@ -64,14 +64,14 @@ public class MultiPageKeyboard {
         if (pageIndex > 0) {
             MultipageMenuCallback callback = new MultipageMenuCallback(menu, pageIndex - 1);
             navigate.add(InlineKeyboardButton.builder()
-                    .text(ButtonsText.PREVIOUS_PAGE.getText())
+                    .text(ButtonText.PREVIOUS_PAGE.getText())
                     .callbackData(callback.getData())
                     .build());
         }
         if (pageIndex < countOfPages - 1) {
             MultipageMenuCallback callback = new MultipageMenuCallback(menu, pageIndex + 1);
             navigate.add(InlineKeyboardButton.builder()
-                    .text(ButtonsText.NEXT_PAGE.getText())
+                    .text(ButtonText.NEXT_PAGE.getText())
                     .callbackData(callback.getData())
                     .build());
         }

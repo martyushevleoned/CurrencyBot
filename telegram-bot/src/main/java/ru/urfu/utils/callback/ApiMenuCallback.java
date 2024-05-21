@@ -1,7 +1,7 @@
 package ru.urfu.utils.callback;
 
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import ru.urfu.controller.constant.MenuTypes;
+import ru.urfu.controller.constant.MenuType;
 import ru.urfu.exceptions.CallbackException;
 
 /**
@@ -9,7 +9,7 @@ import ru.urfu.exceptions.CallbackException;
  */
 public class ApiMenuCallback extends MenuCallback {
 
-    public ApiMenuCallback(MenuTypes menu, String apiName) {
+    public ApiMenuCallback(MenuType menu, String apiName) {
         super(menu);
         addOption(Option.API_NAME, apiName);
     }

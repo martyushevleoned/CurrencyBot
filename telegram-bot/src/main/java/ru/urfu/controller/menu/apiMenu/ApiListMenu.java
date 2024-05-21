@@ -9,8 +9,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.ApiService;
-import ru.urfu.controller.constant.MenuTypes;
-import ru.urfu.controller.constant.UserCommands;
+import ru.urfu.controller.constant.MenuType;
+import ru.urfu.controller.constant.UserCommand;
 import ru.urfu.controller.menu.CallbackMenu;
 import ru.urfu.controller.menu.CommandMenu;
 import ru.urfu.utils.callback.ApiMenuCallback;
@@ -36,7 +36,7 @@ public class ApiListMenu implements CommandMenu, CallbackMenu {
                 .sorted()
                 .forEach(apiName -> {
 
-            ApiMenuCallback callback = new ApiMenuCallback(MenuTypes.API, apiName);
+            ApiMenuCallback callback = new ApiMenuCallback(MenuType.API, apiName);
             rows.add(List.of(InlineKeyboardButton.builder()
                     .text(apiName)
                     .callbackData(callback.getData())
@@ -46,22 +46,22 @@ public class ApiListMenu implements CommandMenu, CallbackMenu {
     }
 
     @Override
-    public UserCommands getUserCommand() {
-        return UserCommands.API;
+    public UserCommand getUserCommand() {
+        return UserCommand.API;
     }
 
     @Override
     public SendMessage formSendMessage(Message message) {
         return SendMessage.builder()
                 .chatId(message.getChatId())
-                .text(MenuTypes.API_LIST.getText())
+                .text(MenuType.API_LIST.getText())
                 .replyMarkup(inlineKeyboardMarkup)
                 .build();
     }
 
     @Override
-    public MenuTypes getMenuType() {
-        return MenuTypes.API_LIST;
+    public MenuType getMenuType() {
+        return MenuType.API_LIST;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class ApiListMenu implements CommandMenu, CallbackMenu {
         return EditMessageText.builder()
                 .chatId(callbackQuery.getMessage().getChatId())
                 .messageId(callbackQuery.getMessage().getMessageId())
-                .text(MenuTypes.API_LIST.getText())
+                .text(MenuType.API_LIST.getText())
                 .replyMarkup(inlineKeyboardMarkup)
                 .build();
     }

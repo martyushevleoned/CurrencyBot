@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.urfu.ApiService;
-import ru.urfu.controller.constant.MenuTypes;
+import ru.urfu.controller.constant.MenuType;
 import ru.urfu.controller.menu.MainMenu;
 import ru.urfu.controller.menu.apiMenu.ApiListMenu;
 import ru.urfu.controller.menu.currencyMenu.CurrencyListMenu;
@@ -96,11 +96,11 @@ public class UpdateControllerCommandTest {
                 .replyMarkup(InlineKeyboardMarkup.builder()
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text("Все валюты")
-                                .callbackData(new MultipageMenuCallback(MenuTypes.CURRENCY_ADD_TO_TRACK_LIST).getData())
+                                .callbackData(new MultipageMenuCallback(MenuType.CURRENCY_ADD_TO_TRACK_LIST).getData())
                                 .build()))
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text("Отслеживаемые валюты")
-                                .callbackData(new MultipageMenuCallback(MenuTypes.TRACKED_CURRENCY_LIST).getData())
+                                .callbackData(new MultipageMenuCallback(MenuType.TRACKED_CURRENCY_LIST).getData())
                                 .build()))
                         .build()).build()));
     }
@@ -131,15 +131,15 @@ public class UpdateControllerCommandTest {
                 .replyMarkup(InlineKeyboardMarkup.builder()
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text(textFormater.getCurrencyInfo(firstCurrencyRequest))
-                                .callbackData(new CurrencyRequestMenuCallback(MenuTypes.TRACKED_CURRENCY, firstCurrencyRequest).getData())
+                                .callbackData(new CurrencyRequestMenuCallback(MenuType.TRACKED_CURRENCY, firstCurrencyRequest).getData())
                                 .build()))
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text(textFormater.getCurrencyInfo(secondCurrencyRequest))
-                                .callbackData(new CurrencyRequestMenuCallback(MenuTypes.TRACKED_CURRENCY, secondCurrencyRequest).getData())
+                                .callbackData(new CurrencyRequestMenuCallback(MenuType.TRACKED_CURRENCY, secondCurrencyRequest).getData())
                                 .build()))
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text("Назад")
-                                .callbackData(new MenuCallback(MenuTypes.MAIN_MENU).getData())
+                                .callbackData(new MenuCallback(MenuType.MAIN_MENU).getData())
                                 .build()))
                         .build()).build()));
     }
@@ -170,15 +170,15 @@ public class UpdateControllerCommandTest {
                 .replyMarkup(InlineKeyboardMarkup.builder()
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text(textFormater.getCurrencyInfo(firstCurrencyRequest))
-                                .callbackData(new CurrencyRequestMenuCallback(MenuTypes.CURRENCY_ADD_TO_TRACK, firstCurrencyRequest).getData())
+                                .callbackData(new CurrencyRequestMenuCallback(MenuType.CURRENCY_ADD_TO_TRACK, firstCurrencyRequest).getData())
                                 .build()))
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text(textFormater.getCurrencyInfo(secondCurrencyRequest))
-                                .callbackData(new CurrencyRequestMenuCallback(MenuTypes.CURRENCY_ADD_TO_TRACK, secondCurrencyRequest).getData())
+                                .callbackData(new CurrencyRequestMenuCallback(MenuType.CURRENCY_ADD_TO_TRACK, secondCurrencyRequest).getData())
                                 .build()))
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text("Назад")
-                                .callbackData(new MenuCallback(MenuTypes.MAIN_MENU).getData())
+                                .callbackData(new MenuCallback(MenuType.MAIN_MENU).getData())
                                 .build()))
                         .build()).build()));
     }
@@ -209,11 +209,11 @@ public class UpdateControllerCommandTest {
                 .replyMarkup(InlineKeyboardMarkup.builder()
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text(firstCurrencyRequest.api())
-                                .callbackData(new ApiMenuCallback(MenuTypes.API, firstCurrencyRequest.api()).getData())
+                                .callbackData(new ApiMenuCallback(MenuType.API, firstCurrencyRequest.api()).getData())
                                 .build()))
                         .keyboardRow(List.of(InlineKeyboardButton.builder()
                                 .text(secondCurrencyRequest.api())
-                                .callbackData(new ApiMenuCallback(MenuTypes.API, secondCurrencyRequest.api()).getData())
+                                .callbackData(new ApiMenuCallback(MenuType.API, secondCurrencyRequest.api()).getData())
                                 .build()))
                         .build()).build()));
     }

@@ -7,8 +7,8 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.ApiService;
-import ru.urfu.controller.constant.ButtonsText;
-import ru.urfu.controller.constant.MenuTypes;
+import ru.urfu.controller.constant.ButtonText;
+import ru.urfu.controller.constant.MenuType;
 import ru.urfu.controller.menu.CallbackMenu;
 import ru.urfu.utils.callback.ApiMenuCallback;
 import ru.urfu.utils.callback.MenuCallback;
@@ -24,8 +24,8 @@ public class ApiMenu implements CallbackMenu {
     private final ApiService apiService;
     private final InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup.builder()
             .keyboardRow(List.of(InlineKeyboardButton.builder()
-                    .text(ButtonsText.BACK.getText())
-                    .callbackData(new MenuCallback(MenuTypes.API_LIST).getData())
+                    .text(ButtonText.BACK.getText())
+                    .callbackData(new MenuCallback(MenuType.API_LIST).getData())
                     .build()))
             .build();
 
@@ -35,8 +35,8 @@ public class ApiMenu implements CallbackMenu {
     }
 
     @Override
-    public MenuTypes getMenuType() {
-        return MenuTypes.API;
+    public MenuType getMenuType() {
+        return MenuType.API;
     }
 
     @Override

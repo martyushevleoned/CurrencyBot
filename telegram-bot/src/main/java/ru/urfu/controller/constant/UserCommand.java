@@ -3,7 +3,7 @@ package ru.urfu.controller.constant;
 /**
  * Список всех команд, воспринимаемых ботом
  */
-public enum UserCommands {
+public enum UserCommand {
 
     /**
      * Команда получения главного меню
@@ -30,7 +30,7 @@ public enum UserCommands {
      */
     private final String command;
 
-    UserCommands(String command) {
+    UserCommand(String command) {
         this.command = command;
     }
 

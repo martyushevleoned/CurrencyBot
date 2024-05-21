@@ -1,7 +1,7 @@
 package ru.urfu.utils.callback;
 
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import ru.urfu.controller.constant.MenuTypes;
+import ru.urfu.controller.constant.MenuType;
 import ru.urfu.exceptions.CallbackException;
 
 /**
@@ -9,12 +9,12 @@ import ru.urfu.exceptions.CallbackException;
  */
 public class MultipageMenuCallback extends MenuCallback {
 
-    public MultipageMenuCallback(MenuTypes menu) {
+    public MultipageMenuCallback(MenuType menu) {
         super(menu);
         addOption(Option.PAGE_INDEX, "0");
     }
 
-    public MultipageMenuCallback(MenuTypes menu, int pageIndex) {
+    public MultipageMenuCallback(MenuType menu, int pageIndex) {
         super(menu);
         addOption(Option.PAGE_INDEX, String.valueOf(pageIndex));
     }

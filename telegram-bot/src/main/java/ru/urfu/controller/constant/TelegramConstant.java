@@ -3,7 +3,7 @@ package ru.urfu.controller.constant;
 /**
  *  Константы ограничений API телеграмма
  */
-public interface TelegramConstants {
+public interface TelegramConstant {
 
     /**
      * Максимальное количество рядов кнопок в {@link org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup}

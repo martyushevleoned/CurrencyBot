@@ -12,8 +12,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.urfu.controller.constant.ErrorMessageForUser;
-import ru.urfu.controller.constant.MenuTypes;
+import ru.urfu.controller.constant.ErrorMessage;
+import ru.urfu.controller.constant.MenuType;
 import ru.urfu.controller.menu.CallbackMenu;
 import ru.urfu.controller.menu.CommandMenu;
 import ru.urfu.exceptions.*;
@@ -36,7 +36,7 @@ public class UpdateController {
      */
     private final Map<String, CommandMenu> commandMenuMap;
     /**
-     * Коллекция сопоставляющая {@link MenuTypes#getMenuName() название меню} и класс для обработки {@link Update обновлений} данного меню
+     * Коллекция сопоставляющая {@link MenuType#getMenuName название меню} и класс для обработки {@link Update обновлений} данного меню
      */
     private final Map<String, CallbackMenu> callbackMenuMap;
     private final AbsSender sender;
@@ -76,19 +76,19 @@ public class UpdateController {
 
         } catch (ApiNotFoundException e) {
             LOG.error("Обращение к несуществующему API", e);
-            sender.execute(errorSendMessage(message, ErrorMessageForUser.API_NOT_FOUND_EXCEPTION));
+            sender.execute(errorSendMessage(message, ErrorMessage.API_NOT_FOUND_EXCEPTION));
         } catch (ApiNotSupportedCurrencyException e) {
             LOG.error("Обращение к неподдерживаемой валюте API", e);
-            sender.execute(errorSendMessage(message, ErrorMessageForUser.CURRENCY_NOT_FOUND_EXCEPTION));
+            sender.execute(errorSendMessage(message, ErrorMessage.CURRENCY_NOT_FOUND_EXCEPTION));
         } catch (ParseJsonException e) {
             LOG.error("Обращение к несуществующему API", e);
-            sender.execute(errorSendMessage(message, ErrorMessageForUser.PARSE_JSON_EXCEPTION));
+            sender.execute(errorSendMessage(message, ErrorMessage.PARSE_JSON_EXCEPTION));
         } catch (SendRequestException e) {
             LOG.error("Получение данных по http запросу", e);
-            sender.execute(errorSendMessage(message, ErrorMessageForUser.SEND_REQUEST_EXCEPTION));
+            sender.execute(errorSendMessage(message, ErrorMessage.SEND_REQUEST_EXCEPTION));
         } catch (CallbackException e) {
             LOG.error("Обращение к несуществующему API", e);
-            sender.execute(errorSendMessage(message, ErrorMessageForUser.CALLBACK_EXCEPTION));
+            sender.execute(errorSendMessage(message, ErrorMessage.CALLBACK_EXCEPTION));
         }
     }
 
@@ -96,12 +96,12 @@ public class UpdateController {
      * Сформировать сообщение ошибки
      *
      * @param message      сообщение на которое необходимо ответить
-     * @param errorMessageForUser константа с текстом ошибки
+     * @param errorMessage константа с текстом ошибки
      */
-    private SendMessage errorSendMessage(Message message, ErrorMessageForUser errorMessageForUser) {
+    private SendMessage errorSendMessage(Message message, ErrorMessage errorMessage) {
         return SendMessage.builder()
                 .chatId(message.getChatId())
-                .text(errorMessageForUser.getText())
+                .text(errorMessage.getText())
                 .build();
     }
 
@@ -117,19 +117,19 @@ public class UpdateController {
 
         } catch (ApiNotFoundException e) {
             LOG.error("Обращение к несуществующему API", e);
-            sender.execute(errorEditMessage(callbackQuery, ErrorMessageForUser.API_NOT_FOUND_EXCEPTION));
+            sender.execute(errorEditMessage(callbackQuery, ErrorMessage.API_NOT_FOUND_EXCEPTION));
         } catch (ApiNotSupportedCurrencyException e) {
             LOG.error("Обращение к неподдерживаемой валюте API", e);
-            sender.execute(errorEditMessage(callbackQuery, ErrorMessageForUser.CURRENCY_NOT_FOUND_EXCEPTION));
+            sender.execute(errorEditMessage(callbackQuery, ErrorMessage.CURRENCY_NOT_FOUND_EXCEPTION));
         } catch (ParseJsonException e) {
             LOG.error("Обращение к несуществующему API", e);
-            sender.execute(errorEditMessage(callbackQuery, ErrorMessageForUser.PARSE_JSON_EXCEPTION));
+            sender.execute(errorEditMessage(callbackQuery, ErrorMessage.PARSE_JSON_EXCEPTION));
         } catch (SendRequestException e) {
             LOG.error("Получение данных по http запросу", e);
-            sender.execute(errorEditMessage(callbackQuery, ErrorMessageForUser.SEND_REQUEST_EXCEPTION));
+            sender.execute(errorEditMessage(callbackQuery, ErrorMessage.SEND_REQUEST_EXCEPTION));
         } catch (CallbackException e) {
             LOG.error("Обращение к несуществующему API", e);
-            sender.execute(errorEditMessage(callbackQuery, ErrorMessageForUser.CALLBACK_EXCEPTION));
+            sender.execute(errorEditMessage(callbackQuery, ErrorMessage.CALLBACK_EXCEPTION));
         }
     }
 
@@ -137,13 +137,13 @@ public class UpdateController {
      * Сформировать изменённое сообщение ошибки
      *
      * @param callbackQuery параметры сообщения, которое нужно изменить
-     * @param errorMessageForUser  константа с текстом ошибки
+     * @param errorMessage  константа с текстом ошибки
      */
-    private EditMessageText errorEditMessage(CallbackQuery callbackQuery, ErrorMessageForUser errorMessageForUser) {
+    private EditMessageText errorEditMessage(CallbackQuery callbackQuery, ErrorMessage errorMessage) {
         return EditMessageText.builder()
                 .chatId(callbackQuery.getMessage().getChatId())
                 .messageId(callbackQuery.getMessage().getMessageId())
-                .text(errorMessageForUser.getText())
+                .text(errorMessage.getText())
                 .build();
     }
 }

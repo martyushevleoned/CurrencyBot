@@ -7,8 +7,8 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.ApiService;
-import ru.urfu.controller.constant.ButtonsText;
-import ru.urfu.controller.constant.MenuTypes;
+import ru.urfu.controller.constant.ButtonText;
+import ru.urfu.controller.constant.MenuType;
 import ru.urfu.controller.menu.CallbackMenu;
 import ru.urfu.model.CurrencyRequest;
 import ru.urfu.model.CurrencyResponse;
@@ -33,8 +33,8 @@ public class TrackedCurrencyMenu implements CallbackMenu {
     }
 
     @Override
-    public MenuTypes getMenuType() {
-        return  MenuTypes.TRACKED_CURRENCY;
+    public MenuType getMenuType() {
+        return  MenuType.TRACKED_CURRENCY;
     }
 
     @Override
@@ -70,11 +70,11 @@ public class TrackedCurrencyMenu implements CallbackMenu {
 
         return InlineKeyboardMarkup.builder()
                 .keyboardRow(List.of(InlineKeyboardButton.builder()
-                        .text(ButtonsText.UPDATE_PRICE.getText())
+                        .text(ButtonText.UPDATE_PRICE.getText())
                         .callbackData(callback.getData()).build()))
                 .keyboardRow(List.of(InlineKeyboardButton.builder()
-                        .text(ButtonsText.BACK.getText())
-                        .callbackData(new MultipageMenuCallback(MenuTypes.TRACKED_CURRENCY_LIST).getData()).build()))
+                        .text(ButtonText.BACK.getText())
+                        .callbackData(new MultipageMenuCallback(MenuType.TRACKED_CURRENCY_LIST).getData()).build()))
                 .build();
     }
 }

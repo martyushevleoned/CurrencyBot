@@ -3,7 +3,7 @@ package ru.urfu.utils.callback;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import ru.urfu.controller.constant.TelegramConstants;
+import ru.urfu.controller.constant.TelegramConstant;
 import ru.urfu.exceptions.CallbackException;
 
 import java.io.Serializable;
@@ -80,7 +80,7 @@ class Callback implements Serializable {
         DocumentContext documentContext = JsonPath.parse("{}");
         options.forEach((option, value) -> documentContext.put("$", option, value));
         String json = documentContext.jsonString();
-        if (json.length() >= TelegramConstants.MAX_CALLBACK_DATA_LENGTH)
+        if (json.length() >= TelegramConstant.MAX_CALLBACK_DATA_LENGTH)
             throw new CallbackException("Превышен допустимый размер CallbackData");
         return json;
     }
