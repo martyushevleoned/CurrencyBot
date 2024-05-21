@@ -24,7 +24,7 @@ public class RequestSender {
      * @return тело отклика, если отклик не получен возвращает null
      * @throws SendRequestException если невозможно получить тело отклика или возникла ошибка при выполнении запроса
      */
-    public String sendGetRequest(String url) {
+    public String sendGetRequest(String url) throws SendRequestException{
         Request request = new Request.Builder().url(url).build();
         try (Response response = client.newCall(request).execute()) {
             ResponseBody responseBody = response.body();

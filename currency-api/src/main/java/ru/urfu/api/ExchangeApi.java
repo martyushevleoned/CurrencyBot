@@ -2,6 +2,8 @@ package ru.urfu.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.urfu.exceptions.ParseJsonException;
+import ru.urfu.exceptions.SendRequestException;
 import ru.urfu.model.ApiDescription;
 import ru.urfu.model.CurrencyResponse;
 import ru.urfu.utils.CurrencyCache;
@@ -57,7 +59,7 @@ public class ExchangeApi implements CurrencyApi {
     }
 
     @Override
-    public CurrencyResponse getPrice(String currency) {
+    public CurrencyResponse getPrice(String currency) throws SendRequestException, ParseJsonException {
 
         if (cache.notContains(currency)) {
             String response = requestSender.sendGetRequest(URL);

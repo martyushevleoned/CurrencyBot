@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.urfu.api.CurrencyApi;
 import ru.urfu.exceptions.ApiNotFoundException;
 import ru.urfu.exceptions.ApiNotSupportedCurrencyException;
+import ru.urfu.exceptions.ParseJsonException;
+import ru.urfu.exceptions.SendRequestException;
 import ru.urfu.model.CurrencyRequest;
 import ru.urfu.model.CurrencyResponse;
 
@@ -52,10 +54,16 @@ public class ApiService {
      * Получить стоимость валюты на основе названия API и валюты
      *
      * @param currencyRequest запрос с информацией о запрашиваемой валюте и названием API
-     * @throws ApiNotFoundException если API не существует
+     * @throws ApiNotFoundException             если API не существует
      * @throws ApiNotSupportedCurrencyException если API не поддерживает валюту
+     * @throws SendRequestException             если невозможно обратиться к API
+     * @throws ParseJsonException               если невозможно обработать ответ API
      */
-    public CurrencyResponse getPrice(CurrencyRequest currencyRequest) {
+    public CurrencyResponse getPrice(CurrencyRequest currencyRequest) throws
+            ApiNotFoundException,
+            ApiNotSupportedCurrencyException,
+            SendRequestException,
+            ParseJsonException {
 
         if (!currencyApiMap.containsKey(currencyRequest.api()))
             throw new ApiNotFoundException("Указанный API не существует");
@@ -74,9 +82,9 @@ public class ApiService {
      *
      * @param apiName название API
      * @return текстовое описание API
-     * @throws ApiNotSupportedCurrencyException если API не поддерживает валюту
+     * @throws ApiNotFoundException если API не существует
      */
-    public String getDescription(String apiName) {
+    public String getDescription(String apiName) throws ApiNotFoundException {
 
         if (!currencyApiMap.containsKey(apiName))
             throw new ApiNotFoundException("Указанный API не существует");
