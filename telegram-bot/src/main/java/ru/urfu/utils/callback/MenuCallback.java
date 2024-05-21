@@ -9,6 +9,9 @@ import ru.urfu.exceptions.CallbackException;
  */
 public class MenuCallback extends Callback {
 
+    /**
+     * TODO
+     */
     public MenuCallback(MenuType menu) {
         super();
         addOption(Option.MENU_NAME, menu.getMenuName());
@@ -21,6 +24,15 @@ public class MenuCallback extends Callback {
      */
     public MenuCallback(CallbackQuery callbackQuery) {
         super(callbackQuery);
+        if (!containsOption(Option.MENU_NAME))
+            throw new CallbackException("Отсутствует название меню");
+    }
+
+    /**
+     * TODO
+     */
+    public MenuCallback(Callback callback) {
+        super(callback);
         if (!containsOption(Option.MENU_NAME))
             throw new CallbackException("Отсутствует название меню");
     }

@@ -1,6 +1,5 @@
 package ru.urfu.utils.callback;
 
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import ru.urfu.controller.constant.MenuType;
 import ru.urfu.exceptions.CallbackException;
 
@@ -9,23 +8,27 @@ import ru.urfu.exceptions.CallbackException;
  */
 public class MultipageMenuCallback extends MenuCallback {
 
+    /**
+     * TODO
+     */
     public MultipageMenuCallback(MenuType menu) {
         super(menu);
         addOption(Option.PAGE_INDEX, "0");
     }
 
+    /**
+     * TODO
+     */
     public MultipageMenuCallback(MenuType menu, int pageIndex) {
         super(menu);
         addOption(Option.PAGE_INDEX, String.valueOf(pageIndex));
     }
 
     /**
-     * Десериализовать опции из {@link CallbackQuery}
-     * @param callbackQuery поле {@link org.telegram.telegrambots.meta.api.objects.Update обновления}
-     * @throws CallbackException если отсутствует опция - номер страницы
+     * TODO
      */
-    public MultipageMenuCallback(CallbackQuery callbackQuery) {
-        super(callbackQuery);
+    public MultipageMenuCallback(Callback callback) {
+        super(callback);
         if (!containsOption(Option.PAGE_INDEX))
             throw new CallbackException("Отсутствует номер страницы");
     }

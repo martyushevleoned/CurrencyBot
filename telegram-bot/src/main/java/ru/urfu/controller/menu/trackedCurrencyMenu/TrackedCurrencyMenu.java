@@ -3,7 +3,6 @@ package ru.urfu.controller.menu.trackedCurrencyMenu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.ApiService;
@@ -38,14 +37,12 @@ public class TrackedCurrencyMenu implements CallbackMenu {
     }
 
     @Override
-    public EditMessageText formEditMessage(CallbackQuery callbackQuery) {
-        long chatId = callbackQuery.getMessage().getChatId();
-        int messageId = callbackQuery.getMessage().getMessageId();
+    public EditMessageText formEditMessage(long chatId, int messageId, MenuCallback menuCallback) {
 
         // запрос
-        CurrencyRequestFlagMenuCallback callback = new CurrencyRequestFlagMenuCallback(callbackQuery);
+        CurrencyRequestFlagMenuCallback callback = new CurrencyRequestFlagMenuCallback(menuCallback);
         CurrencyRequest currencyRequest = callback.getCurrencyRequest();
-        CurrencyResponse currencyResponse = apiService.getPrice(currencyRequest);
+        CurrencyResponse currencyResponse = apiService.getPrice(currencyRequest); //TODO добавить обработку ошибок
 
         // текст меню
         String text = textFormater.getPriceInfo(currencyRequest, currencyResponse);

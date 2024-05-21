@@ -3,6 +3,7 @@ package ru.urfu.controller.constant;
 import ru.urfu.exceptions.*;
 
 /**
+ * TODO необходимо использовать для обработки ошибок или удалить
  * Тексты сообщений, отправляемых пользователю при возникновении исключений
  */
 public enum ErrorMessage {

@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.controller.constant.ButtonText;
@@ -50,12 +48,11 @@ public class TrackedCurrencyListMenu implements CommandMenu, CallbackMenu {
     }
 
     @Override
-    public SendMessage formSendMessage(Message message) {
-
+    public SendMessage formSendMessage(long chatId) {
         return SendMessage.builder()
-                .chatId(message.getChatId())
+                .chatId(chatId)
                 .text(MenuType.TRACKED_CURRENCY_LIST.getText())
-                .replyMarkup(getInlineKeyboardMarkup(message.getChatId(), 0))
+                .replyMarkup(getInlineKeyboardMarkup(chatId, 0))
                 .build();
     }
 
@@ -65,13 +62,12 @@ public class TrackedCurrencyListMenu implements CommandMenu, CallbackMenu {
     }
 
     @Override
-    public EditMessageText formEditMessage(CallbackQuery callbackQuery) {
-
+    public EditMessageText formEditMessage(long chatId, int messageId, MenuCallback menuCallback) {
         return EditMessageText.builder()
-                .chatId(callbackQuery.getMessage().getChatId())
-                .messageId(callbackQuery.getMessage().getMessageId())
+                .chatId(chatId)
+                .messageId(messageId)
                 .text(MenuType.TRACKED_CURRENCY_LIST.getText())
-                .replyMarkup(getInlineKeyboardMarkup(callbackQuery.getMessage().getChatId(), new MultipageMenuCallback(callbackQuery).getPageIndex()))
+                .replyMarkup(getInlineKeyboardMarkup(chatId, new MultipageMenuCallback(menuCallback).getPageIndex()))
                 .build();
     }
 

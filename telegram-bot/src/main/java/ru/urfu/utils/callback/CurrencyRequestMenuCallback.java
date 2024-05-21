@@ -1,6 +1,5 @@
 package ru.urfu.utils.callback;
 
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import ru.urfu.controller.constant.MenuType;
 import ru.urfu.exceptions.CallbackException;
 import ru.urfu.model.CurrencyRequest;
@@ -16,12 +15,10 @@ public class CurrencyRequestMenuCallback extends ApiMenuCallback {
     }
 
     /**
-     * Десериализовать опции из {@link CallbackQuery}
-     * @param callbackQuery поле {@link org.telegram.telegrambots.meta.api.objects.Update обновления}
-     * @throws CallbackException если отсутствует опция - название валюты
+     * TODO
      */
-    public CurrencyRequestMenuCallback(CallbackQuery callbackQuery) {
-        super(callbackQuery);
+    public CurrencyRequestMenuCallback(Callback callback) {
+        super(callback);
         if (!containsOption(Option.CURRENCY_NAME))
             throw new CallbackException("Отсутствует название валюты");
     }

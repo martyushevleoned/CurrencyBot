@@ -1,7 +1,6 @@
 package ru.urfu.controller.menu;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import ru.urfu.controller.constant.UserCommand;
 
 /**
@@ -17,5 +16,5 @@ public interface CommandMenu {
     /**
      * Формирует меню для отправки
      */
-    SendMessage formSendMessage(Message message);
+    SendMessage formSendMessage(long chatId);
 }

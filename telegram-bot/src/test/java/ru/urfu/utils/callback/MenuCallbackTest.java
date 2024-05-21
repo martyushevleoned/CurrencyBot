@@ -62,24 +62,4 @@ public class MenuCallbackTest {
         menuCallbackFromString = new MenuCallback(callbackQuery);
         Assert.assertEquals(MenuType.TRACKED_CURRENCY.getMenuName(), menuCallbackFromString.getMenuName());
     }
-
-    /**
-     * Тестирование вызова исключения при попытке десериализации отсутствующих данных {@link MenuCallback}
-     * <ul>
-     *     <li>Создаёт {@link Callback} с названием API</li>
-     *     <li>Имитирует получение {@link CallbackQuery} из {@link org.telegram.telegrambots.meta.api.objects.Update Update}</li>
-     *     <li>Создаёт {@link MenuCallback} из {@link CallbackQuery}</li>
-     *     <li>Проверяет вызов и текст исключения</li>
-     * </ul>
-     */
-    @Test
-    public void getCorruptedMenuName() {
-
-        Callback callback = new Callback();
-        callback.addOption(Option.CURRENCY_NAME, "currency");
-        CallbackQuery callbackQuery = new CallbackQuery(null, null, null, null, callback.getData(), null, null);
-
-        CallbackException callbackException = Assert.assertThrows(CallbackException.class, () -> new MenuCallback(callbackQuery));
-        Assert.assertEquals("Отсутствует название меню", callbackException.getMessage());
-    }
 }

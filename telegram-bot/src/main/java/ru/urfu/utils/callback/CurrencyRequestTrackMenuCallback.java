@@ -1,6 +1,5 @@
 package ru.urfu.utils.callback;
 
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import ru.urfu.controller.constant.MenuType;
 import ru.urfu.model.CurrencyRequest;
 
@@ -15,11 +14,10 @@ public class CurrencyRequestTrackMenuCallback extends CurrencyRequestMenuCallbac
     }
 
     /**
-     * Десериализовать опции из {@link CallbackQuery}
-     * @param callbackQuery поле {@link org.telegram.telegrambots.meta.api.objects.Update обновления}
+     * TODO
      */
-    public CurrencyRequestTrackMenuCallback(CallbackQuery callbackQuery) {
-        super(callbackQuery);
+    public CurrencyRequestTrackMenuCallback(Callback callback) {
+        super(callback);
     }
 
     /**

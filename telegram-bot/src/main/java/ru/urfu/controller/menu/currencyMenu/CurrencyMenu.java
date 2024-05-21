@@ -3,7 +3,6 @@ package ru.urfu.controller.menu.currencyMenu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.ApiService;
@@ -14,6 +13,7 @@ import ru.urfu.model.CurrencyRequest;
 import ru.urfu.service.TrackService;
 import ru.urfu.utils.TextFormater;
 import ru.urfu.utils.callback.CurrencyRequestTrackMenuCallback;
+import ru.urfu.utils.callback.MenuCallback;
 import ru.urfu.utils.callback.MultipageMenuCallback;
 
 import java.util.List;
@@ -43,10 +43,9 @@ public class CurrencyMenu implements CallbackMenu {
     }
 
     @Override
-    public EditMessageText formEditMessage(CallbackQuery callbackQuery) {
+    public EditMessageText formEditMessage(long chatId, int messageId, MenuCallback menuCallback) {
 
-        long chatId = callbackQuery.getMessage().getChatId();
-        CurrencyRequestTrackMenuCallback callback = new CurrencyRequestTrackMenuCallback(callbackQuery);
+        CurrencyRequestTrackMenuCallback callback = new CurrencyRequestTrackMenuCallback(menuCallback);
         CurrencyRequest currencyRequest = callback.getCurrencyRequest();
 
         // обработка опций
@@ -58,8 +57,8 @@ public class CurrencyMenu implements CallbackMenu {
 
         return EditMessageText.builder()
                 .chatId(chatId)
-                .messageId(callbackQuery.getMessage().getMessageId())
-                .text(textFormater.getPriceInfo(currencyRequest, apiService.getPrice(currencyRequest)))
+                .messageId(messageId)
+                .text(textFormater.getPriceInfo(currencyRequest, apiService.getPrice(currencyRequest))) //TODO добавить обработку ошибок
                 .replyMarkup(getInlineKeyboardMarkup(chatId, currencyRequest))
                 .build();
     }

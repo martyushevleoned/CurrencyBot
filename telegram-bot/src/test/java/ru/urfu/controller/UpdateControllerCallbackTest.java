@@ -87,7 +87,7 @@ public class UpdateControllerCallbackTest {
     @Test
     public void mainMenuCallbackTest() throws TelegramApiException {
 
-        Update update = generateCallbackUpdate(1L, 2, new MenuCallback(MenuType.MAIN_MENU).getData());
+        Update update = generateUpdate(1L, 2, new MenuCallback(MenuType.MAIN_MENU).getData());
         updateController.processUpdate(update);
 
         Mockito.verify(sender, Mockito.times(1)).execute(Mockito.eq(EditMessageText.builder()
@@ -123,7 +123,7 @@ public class UpdateControllerCallbackTest {
     @Test
     public void trackedCurrencyListMenuCallbackTest() throws TelegramApiException {
 
-        Update update = generateCallbackUpdate(2L, 3, new MultipageMenuCallback(MenuType.TRACKED_CURRENCY_LIST).getData());
+        Update update = generateUpdate(2L, 3, new MultipageMenuCallback(MenuType.TRACKED_CURRENCY_LIST).getData());
         updateController.processUpdate(update);
 
         Mockito.verify(sender, Mockito.times(1)).execute(Mockito.eq(EditMessageText.builder()
@@ -163,7 +163,7 @@ public class UpdateControllerCallbackTest {
     @Test
     public void currencyListMenuCallbackTest() throws TelegramApiException {
 
-        Update update = generateCallbackUpdate(3L, 4, new MultipageMenuCallback(MenuType.CURRENCY_ADD_TO_TRACK_LIST).getData());
+        Update update = generateUpdate(3L, 4, new MultipageMenuCallback(MenuType.CURRENCY_ADD_TO_TRACK_LIST).getData());
         updateController.processUpdate(update);
 
         Mockito.verify(sender, Mockito.times(1)).execute(Mockito.eq(EditMessageText.builder()
@@ -203,7 +203,7 @@ public class UpdateControllerCallbackTest {
     @Test
     public void apiListMenuCallbackTest() throws TelegramApiException {
 
-        Update update = generateCallbackUpdate(4L, 5, new MenuCallback(MenuType.API_LIST).getData());
+        Update update = generateUpdate(4L, 5, new MenuCallback(MenuType.API_LIST).getData());
         updateController.processUpdate(update);
 
         Mockito.verify(sender, Mockito.times(1)).execute(Mockito.eq(EditMessageText.builder()
@@ -229,7 +229,7 @@ public class UpdateControllerCallbackTest {
      * @param messageId    идентификатор сообщения
      * @param callbackData текст возвращаемый в {@link Update обновление} по нажатию кнопки
      */
-    private Update generateCallbackUpdate(long chatId, int messageId, String callbackData) {
+    private Update generateUpdate(long chatId, int messageId, String callbackData) {
 
         Message message = Mockito.mock(Message.class);
         Mockito.when(message.getChatId()).thenReturn(chatId);

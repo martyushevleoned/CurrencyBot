@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.ApiService;
@@ -45,13 +43,12 @@ public class CurrencyListMenu implements CommandMenu, CallbackMenu {
      */
     private List<InlineKeyboardMarkup> initKeyboard(ApiService apiService, MultiPageKeyboard multiPageKeyboard) {
         List<InlineKeyboardButton> buttons = apiService.getPossibleRequests().stream()
-                .map(currencyRequest -> {
-                    CurrencyRequestMenuCallback callback = new CurrencyRequestMenuCallback(MenuType.CURRENCY_ADD_TO_TRACK, currencyRequest);
-                    return InlineKeyboardButton.builder()
-                            .text(textFormater.getCurrencyInfo(currencyRequest))
-                            .callbackData(callback.getData())
-                            .build();
-                })
+                .map(currencyRequest ->
+                        InlineKeyboardButton.builder()
+                                .text(textFormater.getCurrencyInfo(currencyRequest))
+                                .callbackData(new CurrencyRequestMenuCallback(MenuType.CURRENCY_ADD_TO_TRACK, currencyRequest).getData())
+                                .build()
+                )
                 .sorted(Comparator.comparing(InlineKeyboardButton::getText))
                 .toList();
 
@@ -79,9 +76,9 @@ public class CurrencyListMenu implements CommandMenu, CallbackMenu {
     }
 
     @Override
-    public SendMessage formSendMessage(Message message) {
+    public SendMessage formSendMessage(long chatId) {
         return SendMessage.builder()
-                .chatId(message.getChatId())
+                .chatId(chatId)
                 .text(MenuType.CURRENCY_ADD_TO_TRACK_LIST.getText())
                 .replyMarkup(inlineKeyboardMarkups.get(0))
                 .build();
@@ -93,12 +90,12 @@ public class CurrencyListMenu implements CommandMenu, CallbackMenu {
     }
 
     @Override
-    public EditMessageText formEditMessage(CallbackQuery callbackQuery) {
+    public EditMessageText formEditMessage(long chatId, int messageId, MenuCallback menuCallback) {
         return EditMessageText.builder()
-                .chatId(callbackQuery.getMessage().getChatId())
-                .messageId(callbackQuery.getMessage().getMessageId())
+                .chatId(chatId)
+                .messageId(messageId)
                 .text(MenuType.CURRENCY_ADD_TO_TRACK_LIST.getText())
-                .replyMarkup(inlineKeyboardMarkups.get(new MultipageMenuCallback(callbackQuery).getPageIndex()))
+                .replyMarkup(inlineKeyboardMarkups.get(new MultipageMenuCallback(menuCallback).getPageIndex()))
                 .build();
     }
 }

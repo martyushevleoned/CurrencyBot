@@ -3,7 +3,6 @@ package ru.urfu.controller.menu.apiMenu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.ApiService;
@@ -40,13 +39,13 @@ public class ApiMenu implements CallbackMenu {
     }
 
     @Override
-    public EditMessageText formEditMessage(CallbackQuery callbackQuery) {
-        String apiName = new ApiMenuCallback(callbackQuery).getApiName();
-        String description = apiService.getDescription(apiName);
+    public EditMessageText formEditMessage(long chatId, int messageId, MenuCallback menuCallback) {
+        String apiName = new ApiMenuCallback(menuCallback).getApiName();
+        String description = apiService.getDescription(apiName); //TODO добавить обработку ошибок
 
         return EditMessageText.builder()
-                .chatId(callbackQuery.getMessage().getChatId())
-                .messageId(callbackQuery.getMessage().getMessageId())
+                .chatId(chatId)
+                .messageId(messageId)
                 .text(description)
                 .replyMarkup(inlineKeyboardMarkup)
                 .build();

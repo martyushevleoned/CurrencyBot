@@ -11,14 +11,20 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Класс для сериализации и десериализации опций для передачи в {@link CallbackQuery#setData CallbackData}
+ * Абстрактный класс для {@link Callback#getData сериализации} и {@link Callback#Callback(CallbackQuery) десериализации} опций для передачи в {@link CallbackQuery#setData CallbackData}
  * {@link org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton кнопок}
  */
-class Callback implements Serializable {
+abstract class Callback implements Serializable {
 
+    /**
+     * TODO
+     */
     private final Map<String, String> options;
 
-    public Callback() {
+    /**
+     * TODO
+     */
+    Callback() {
         options = new LinkedHashMap<>();
     }
 
@@ -28,8 +34,22 @@ class Callback implements Serializable {
      * @param callbackQuery поле {@link org.telegram.telegrambots.meta.api.objects.Update обновления}
      *                      (обновление - нажатие на кнопку)
      */
-    public Callback(CallbackQuery callbackQuery) {
+    Callback(CallbackQuery callbackQuery) {
         options = JsonPath.parse(callbackQuery.getData()).read("$");
+    }
+
+    /**
+     * TODO
+     */
+    Callback(Callback callback) {
+        options = callback.getOptions();
+    }
+
+    /**
+     * TODO
+     */
+    Map<String, String> getOptions() {
+        return options;
     }
 
     /**
@@ -38,7 +58,7 @@ class Callback implements Serializable {
      * @param option опция
      * @param value  значение
      */
-    protected void addOption(Option option, String value) {
+    void addOption(Option option, String value) {
         options.put(option.getOption(), value);
     }
 
@@ -47,7 +67,7 @@ class Callback implements Serializable {
      *
      * @param option опция
      */
-    protected void removeOption(Option option) {
+    void removeOption(Option option) {
         options.remove(option.getOption());
     }
 
@@ -56,7 +76,7 @@ class Callback implements Serializable {
      *
      * @param option опция
      */
-    protected boolean containsOption(Option option) {
+    boolean containsOption(Option option) {
         return options.containsKey(option.getOption());
     }
 
@@ -66,7 +86,7 @@ class Callback implements Serializable {
      * @param option опция
      * @throws CallbackException если опция отсутствует
      */
-    protected String getOption(Option option) {
+    String getOption(Option option) {
         if (options.containsKey(option.getOption()))
             return options.get(option.getOption());
         throw new CallbackException("Опция %s отсутствует".formatted(option.name()));

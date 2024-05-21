@@ -1,6 +1,5 @@
 package ru.urfu.utils.callback;
 
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import ru.urfu.controller.constant.MenuType;
 import ru.urfu.exceptions.CallbackException;
 
@@ -9,18 +8,19 @@ import ru.urfu.exceptions.CallbackException;
  */
 public class ApiMenuCallback extends MenuCallback {
 
+    /**
+     * TODO
+     */
     public ApiMenuCallback(MenuType menu, String apiName) {
         super(menu);
         addOption(Option.API_NAME, apiName);
     }
 
     /**
-     * Десериализовать опции из {@link CallbackQuery}
-     * @param callbackQuery поле {@link org.telegram.telegrambots.meta.api.objects.Update обновления}
-     * @throws CallbackException если отсутствует опция - название API
+     * TODO
      */
-    public ApiMenuCallback(CallbackQuery callbackQuery) {
-        super(callbackQuery);
+    public ApiMenuCallback(Callback callback) {
+        super(callback);
         if (!containsOption(Option.API_NAME))
             throw new CallbackException("Отсутствует название API");
     }
