@@ -1,7 +1,9 @@
-package ru.urfu.utils.callback;
+package ru.urfu.utils.callback.menuCallback;
 
 import ru.urfu.controller.constant.MenuType;
 import ru.urfu.exceptions.CallbackException;
+import ru.urfu.utils.callback.Callback;
+import ru.urfu.utils.callback.Option;
 
 /**
  * {@link MenuCallback} обязательно содержащий название API
@@ -9,7 +11,9 @@ import ru.urfu.exceptions.CallbackException;
 public class ApiMenuCallback extends MenuCallback {
 
     /**
-     * TODO
+     * Создать сериализуемый объект с обязательными опциями - тип меню и название API
+     *
+     * @param menu тип меню
      */
     public ApiMenuCallback(MenuType menu, String apiName) {
         super(menu);
@@ -17,7 +21,10 @@ public class ApiMenuCallback extends MenuCallback {
     }
 
     /**
-     * TODO
+     * Создать новый объект, приведённый к {@link ApiMenuCallback}
+     *
+     * @param callback объект для приведения
+     * @throws CallbackException если в объекте для приведения отсутствует обязательные поля
      */
     public ApiMenuCallback(Callback callback) {
         super(callback);

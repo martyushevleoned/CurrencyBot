@@ -1,23 +1,24 @@
 package ru.urfu.controller.menu.trackedCurrencyMenu;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import ru.urfu.controller.constant.ButtonText;
-import ru.urfu.controller.constant.MenuType;
-import ru.urfu.controller.constant.TelegramConstant;
-import ru.urfu.controller.constant.UserCommand;
+import ru.urfu.controller.UpdateController;
+import ru.urfu.controller.constant.*;
 import ru.urfu.controller.menu.CallbackMenu;
 import ru.urfu.controller.menu.CommandMenu;
+import ru.urfu.exceptions.CallbackException;
 import ru.urfu.service.TrackService;
 import ru.urfu.utils.MultiPageKeyboard;
 import ru.urfu.utils.TextFormater;
-import ru.urfu.utils.callback.MenuCallback;
-import ru.urfu.utils.callback.CurrencyRequestMenuCallback;
-import ru.urfu.utils.callback.MultipageMenuCallback;
+import ru.urfu.utils.callback.menuCallback.MenuCallback;
+import ru.urfu.utils.callback.menuCallback.currecncyRequestMenuCallback.CurrencyRequestMenuCallback;
+import ru.urfu.utils.callback.menuCallback.MultipageMenuCallback;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -29,6 +30,7 @@ import java.util.List;
 @Component
 public class TrackedCurrencyListMenu implements CommandMenu, CallbackMenu {
 
+    private final Logger LOG = LoggerFactory.getLogger(UpdateController.class);
     private final TrackService trackService;
     private final MultiPageKeyboard multiPageKeyboard;
     private final TextFormater textFormater;
@@ -49,11 +51,19 @@ public class TrackedCurrencyListMenu implements CommandMenu, CallbackMenu {
 
     @Override
     public SendMessage formSendMessage(long chatId) {
-        return SendMessage.builder()
-                .chatId(chatId)
-                .text(MenuType.TRACKED_CURRENCY_LIST.getText())
-                .replyMarkup(getInlineKeyboardMarkup(chatId, 0))
-                .build();
+        try {
+            return SendMessage.builder()
+                    .chatId(chatId)
+                    .text(MenuType.TRACKED_CURRENCY_LIST.getText())
+                    .replyMarkup(getInlineKeyboardMarkup(chatId, 0))
+                    .build();
+        } catch (CallbackException e) {
+            LOG.error("Ошибка создания кнопки", e);
+            return SendMessage.builder()
+                    .chatId(chatId)
+                    .text(ErrorMessage.CALLBACK_EXCEPTION.getText())
+                    .build();
+        }
     }
 
     @Override
@@ -63,12 +73,21 @@ public class TrackedCurrencyListMenu implements CommandMenu, CallbackMenu {
 
     @Override
     public EditMessageText formEditMessage(long chatId, int messageId, MenuCallback menuCallback) {
-        return EditMessageText.builder()
-                .chatId(chatId)
-                .messageId(messageId)
-                .text(MenuType.TRACKED_CURRENCY_LIST.getText())
-                .replyMarkup(getInlineKeyboardMarkup(chatId, new MultipageMenuCallback(menuCallback).getPageIndex()))
-                .build();
+        try {
+            return EditMessageText.builder()
+                    .chatId(chatId)
+                    .messageId(messageId)
+                    .text(MenuType.TRACKED_CURRENCY_LIST.getText())
+                    .replyMarkup(getInlineKeyboardMarkup(chatId, new MultipageMenuCallback(menuCallback).getPageIndex()))
+                    .build();
+        } catch (CallbackException e) {
+            LOG.error("Ошибка создания кнопки", e);
+            return EditMessageText.builder()
+                    .chatId(chatId)
+                    .messageId(messageId)
+                    .text(ErrorMessage.CALLBACK_EXCEPTION.getText())
+                    .build();
+        }
     }
 
     /**
@@ -76,8 +95,9 @@ public class TrackedCurrencyListMenu implements CommandMenu, CallbackMenu {
      *
      * @param chatId    идентификатор пользователя
      * @param pageIndex индекс страницы
+     * @throws CallbackException если невозможно инициализировать хотя бы одну кнопку
      */
-    private InlineKeyboardMarkup getInlineKeyboardMarkup(long chatId, int pageIndex) {
+    private InlineKeyboardMarkup getInlineKeyboardMarkup(long chatId, int pageIndex) throws CallbackException {
         List<List<InlineKeyboardButton>> rows = new ArrayList<>(
                 multiPageKeyboard.getPage(
                         pageIndex,
@@ -96,14 +116,14 @@ public class TrackedCurrencyListMenu implements CommandMenu, CallbackMenu {
      * Получить список валют, отслеживаемых конкретным пользователем
      *
      * @param chatId идентификатор чата пользователя
+     * @throws CallbackException если превышен размер {@link CurrencyRequestMenuCallback сериализуеммого объекта}
      */
-    private List<InlineKeyboardButton> getTrackedButtons(long chatId) {
+    private List<InlineKeyboardButton> getTrackedButtons(long chatId) throws CallbackException {
         return trackService.getTrackedRequests(chatId).stream()
-                .map(currencyRequest ->
-                        InlineKeyboardButton.builder()
-                                .text(textFormater.getCurrencyInfo(currencyRequest))
-                                .callbackData(new CurrencyRequestMenuCallback(MenuType.TRACKED_CURRENCY, currencyRequest).getData())
-                                .build()
+                .map(currencyRequest -> InlineKeyboardButton.builder()
+                        .text(textFormater.getCurrencyInfo(currencyRequest))
+                        .callbackData(new CurrencyRequestMenuCallback(MenuType.TRACKED_CURRENCY, currencyRequest).getData())
+                        .build()
                 )
                 .sorted(Comparator.comparing(InlineKeyboardButton::getText))
                 .toList();

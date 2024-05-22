@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.urfu.controller.constant.MenuType;
 import ru.urfu.controller.menu.CallbackMenu;
 import ru.urfu.controller.menu.CommandMenu;
-import ru.urfu.utils.callback.MenuCallback;
+import ru.urfu.utils.callback.menuCallback.MenuCallback;
 
 import java.util.List;
 import java.util.Map;

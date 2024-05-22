@@ -4,8 +4,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import ru.urfu.controller.constant.MenuType;
-import ru.urfu.exceptions.CallbackException;
 import ru.urfu.model.CurrencyRequest;
+import ru.urfu.utils.callback.menuCallback.ApiMenuCallback;
+import ru.urfu.utils.callback.menuCallback.MenuCallback;
+import ru.urfu.utils.callback.menuCallback.currecncyRequestMenuCallback.CurrencyRequestMenuCallback;
 
 /**
  * Тестирование класса {@link MenuCallback}

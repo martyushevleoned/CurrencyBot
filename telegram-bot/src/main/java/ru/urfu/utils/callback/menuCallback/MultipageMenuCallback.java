@@ -1,7 +1,9 @@
-package ru.urfu.utils.callback;
+package ru.urfu.utils.callback.menuCallback;
 
 import ru.urfu.controller.constant.MenuType;
 import ru.urfu.exceptions.CallbackException;
+import ru.urfu.utils.callback.Callback;
+import ru.urfu.utils.callback.Option;
 
 /**
  * {@link MenuCallback} обязательно содержащий номер страницы
@@ -9,7 +11,10 @@ import ru.urfu.exceptions.CallbackException;
 public class MultipageMenuCallback extends MenuCallback {
 
     /**
-     * TODO
+     * Создать сериализуемый объект с обязательными опциями - тип меню и номер страницы.
+     * Номер страницы по умолчанию равен нулю.
+     *
+     * @param menu тип меню
      */
     public MultipageMenuCallback(MenuType menu) {
         super(menu);
@@ -17,7 +22,10 @@ public class MultipageMenuCallback extends MenuCallback {
     }
 
     /**
-     * TODO
+     * Создать сериализуемый объект с обязательными опциями - тип меню и номер страницы
+     *
+     * @param menu      тип меню
+     * @param pageIndex номер страницы
      */
     public MultipageMenuCallback(MenuType menu, int pageIndex) {
         super(menu);
@@ -25,7 +33,10 @@ public class MultipageMenuCallback extends MenuCallback {
     }
 
     /**
-     * TODO
+     * Создать новый объект, приведённый к {@link MultipageMenuCallback}
+     *
+     * @param callback объект для приведения
+     * @throws CallbackException если в объекте для приведения отсутствует обязательные поля
      */
     public MultipageMenuCallback(Callback callback) {
         super(callback);

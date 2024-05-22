@@ -7,8 +7,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.controller.constant.MenuType;
 import ru.urfu.controller.constant.UserCommand;
-import ru.urfu.utils.callback.MenuCallback;
-import ru.urfu.utils.callback.MultipageMenuCallback;
+import ru.urfu.utils.callback.menuCallback.MenuCallback;
+import ru.urfu.utils.callback.menuCallback.MultipageMenuCallback;
 
 import java.util.List;
 

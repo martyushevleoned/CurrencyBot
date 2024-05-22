@@ -15,9 +15,9 @@ import ru.urfu.controller.menu.CallbackMenu;
 import ru.urfu.controller.menu.CommandMenu;
 import ru.urfu.utils.MultiPageKeyboard;
 import ru.urfu.utils.TextFormater;
-import ru.urfu.utils.callback.MenuCallback;
-import ru.urfu.utils.callback.CurrencyRequestMenuCallback;
-import ru.urfu.utils.callback.MultipageMenuCallback;
+import ru.urfu.utils.callback.menuCallback.MenuCallback;
+import ru.urfu.utils.callback.menuCallback.currecncyRequestMenuCallback.CurrencyRequestMenuCallback;
+import ru.urfu.utils.callback.menuCallback.MultipageMenuCallback;
 
 import java.util.*;
 

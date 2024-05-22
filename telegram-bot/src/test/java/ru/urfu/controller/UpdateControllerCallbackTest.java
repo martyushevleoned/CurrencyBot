@@ -20,10 +20,10 @@ import ru.urfu.model.CurrencyRequest;
 import ru.urfu.service.TrackService;
 import ru.urfu.utils.MultiPageKeyboard;
 import ru.urfu.utils.TextFormater;
-import ru.urfu.utils.callback.ApiMenuCallback;
-import ru.urfu.utils.callback.CurrencyRequestMenuCallback;
-import ru.urfu.utils.callback.MenuCallback;
-import ru.urfu.utils.callback.MultipageMenuCallback;
+import ru.urfu.utils.callback.menuCallback.ApiMenuCallback;
+import ru.urfu.utils.callback.menuCallback.currecncyRequestMenuCallback.CurrencyRequestMenuCallback;
+import ru.urfu.utils.callback.menuCallback.MenuCallback;
+import ru.urfu.utils.callback.menuCallback.MultipageMenuCallback;
 
 import java.util.List;
 import java.util.Set;

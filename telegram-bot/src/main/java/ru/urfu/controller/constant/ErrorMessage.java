@@ -3,35 +3,24 @@ package ru.urfu.controller.constant;
 import ru.urfu.exceptions.*;
 
 /**
- * TODO необходимо использовать для обработки ошибок или удалить
  * Тексты сообщений, отправляемых пользователю при возникновении исключений
  */
 public enum ErrorMessage {
 
     /**
-     * Текст сообщения, отправляемого пользователю при вызове {@link ApiNotFoundException}
+     * Текст сообщения, отправляемого пользователю при вызове исключения в методе {@link ru.urfu.ApiService#getDescription}
      */
-    API_NOT_FOUND_EXCEPTION("API не поддерживается"),
+    API_NOT_FOUND_EXCEPTION("Не удалось обратиться к API"),
 
     /**
-     * Текст сообщения, отправляемого пользователю при вызове {@link ApiNotSupportedCurrencyException}
+     * Текст сообщения, отправляемого пользователю при вызове исключения в методе {@link ru.urfu.ApiService#getPrice}
      */
-    CURRENCY_NOT_FOUND_EXCEPTION("API не поддерживает валюту"),
-
-    /**
-     * Текст сообщения, отправляемого пользователю при вызове {@link SendRequestException}
-     */
-    SEND_REQUEST_EXCEPTION("Ошибка обращения к API"),
-
-    /**
-     * Текст сообщения, отправляемого пользователю при вызове {@link ParseJsonException}
-     */
-    PARSE_JSON_EXCEPTION("Ошибка получения стоимости"),
+    GET_PRICE_EXCEPTION("Не удалось получить стоимости валюты"),
 
     /**
      * Текст сообщения, отправляемого пользователю при вызове {@link CallbackException}
      */
-    CALLBACK_EXCEPTION("Ошибка обработки нажатия кнопки");
+    CALLBACK_EXCEPTION("Ошибка создания кнопки");
 
     /**
      * Текст сообщения ошибки

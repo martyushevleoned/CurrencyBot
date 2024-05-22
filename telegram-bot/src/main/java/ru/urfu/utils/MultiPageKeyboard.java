@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.urfu.controller.constant.ButtonText;
 import ru.urfu.controller.constant.MenuType;
-import ru.urfu.utils.callback.MultipageMenuCallback;
+import ru.urfu.utils.callback.menuCallback.MultipageMenuCallback;
 
 import java.util.ArrayList;
 import java.util.List;

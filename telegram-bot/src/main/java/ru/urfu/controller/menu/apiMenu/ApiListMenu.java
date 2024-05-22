@@ -11,8 +11,8 @@ import ru.urfu.controller.constant.MenuType;
 import ru.urfu.controller.constant.UserCommand;
 import ru.urfu.controller.menu.CallbackMenu;
 import ru.urfu.controller.menu.CommandMenu;
-import ru.urfu.utils.callback.ApiMenuCallback;
-import ru.urfu.utils.callback.MenuCallback;
+import ru.urfu.utils.callback.menuCallback.ApiMenuCallback;
+import ru.urfu.utils.callback.menuCallback.MenuCallback;
 
 import java.util.ArrayList;
 import java.util.List;
