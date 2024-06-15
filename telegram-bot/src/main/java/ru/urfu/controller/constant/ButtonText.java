@@ -1,9 +1,9 @@
-package ru.urfu.controller.menu.constant;
+package ru.urfu.controller.constant;
 
 /**
  * Список текстов кнопок
  */
-public enum ButtonsText {
+public enum ButtonText {
 
     /**
      * Текст на кнопке для обновления курса валюты
@@ -40,7 +40,7 @@ public enum ButtonsText {
      */
     private final String text;
 
-    ButtonsText(String text) {
+    ButtonText(String text) {
         this.text = text;
     }
 

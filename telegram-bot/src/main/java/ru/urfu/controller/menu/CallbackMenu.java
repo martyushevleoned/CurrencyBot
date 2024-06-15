@@ -1,21 +1,22 @@
 package ru.urfu.controller.menu;
 
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import ru.urfu.controller.constant.MenuType;
+import ru.urfu.utils.callback.menuCallback.MenuCallback;
 
 /**
  * Меню вызываемое по нажатию кнопки
  */
-public interface CallbackMenu extends Menu {
+public interface CallbackMenu {
 
     /**
-     * Вызывает ли нажатие кнопки данное меню
+     * Получить {@link MenuType тип меню}
      */
-    boolean matchEditMessage(CallbackQuery callbackQuery);
+    MenuType getMenuType();
 
     /**
      * Формирует изменённое меню для отправки
      */
-    EditMessageText formEditMessage(CallbackQuery callbackQuery);
+    EditMessageText formEditMessage(long chatId, int messageId, MenuCallback menuCallback);
 
 }

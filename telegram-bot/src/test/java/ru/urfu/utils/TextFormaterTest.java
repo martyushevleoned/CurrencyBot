@@ -7,7 +7,7 @@ import org.junit.Test;
 import ru.urfu.model.CurrencyRequest;
 import ru.urfu.model.CurrencyResponse;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.Random;
 
 /**
@@ -29,12 +29,12 @@ public class TextFormaterTest {
     @Before
     public void setUp() {
 
-        apiName = RandomStringUtils.random(100);
-        currencyName = RandomStringUtils.random(100);
+        apiName = RandomStringUtils.random(10);
+        currencyName = RandomStringUtils.random(10);
         price = new Random().nextDouble();
 
         currencyRequest = new CurrencyRequest(apiName, currencyName);
-        currencyResponse = new CurrencyResponse(price, new Date());
+        currencyResponse = new CurrencyResponse(price, Instant.now());
     }
 
     /**

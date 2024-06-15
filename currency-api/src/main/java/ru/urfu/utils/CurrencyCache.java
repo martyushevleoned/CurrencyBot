@@ -3,7 +3,7 @@ package ru.urfu.utils;
 import ru.urfu.model.CurrencyResponse;
 
 import java.time.Duration;
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,14 +13,14 @@ import java.util.Map;
  */
 public class CurrencyCache {
 
-    private final long updateTime;
+    private final Duration updateDuration;
     private final Map<String, CurrencyResponse> currencyResponseMap = new HashMap<>();
 
     /**
-     * @param updateTime период обновления значения
+     * @param updateDuration период обновления значения
      */
-    public CurrencyCache(Duration updateTime) {
-        this.updateTime = updateTime.toMillis();
+    public CurrencyCache(Duration updateDuration) {
+        this.updateDuration = updateDuration;
     }
 
     /**
@@ -32,7 +32,8 @@ public class CurrencyCache {
     public boolean contains(String currencyName) {
         if (!currencyResponseMap.containsKey(currencyName))
             return false;
-        return new Date().getTime() - currencyResponseMap.get(currencyName).getDatetime().getTime() < updateTime;
+        return Duration.between(currencyResponseMap.get(currencyName).instant(), Instant.now())
+                .minus(updateDuration).isNegative();
     }
 
     /**
@@ -52,7 +53,7 @@ public class CurrencyCache {
      * @param price        стоимость валюты
      */
     public void save(String currencyName, double price) {
-        currencyResponseMap.put(currencyName, new CurrencyResponse(price, new Date()));
+        currencyResponseMap.put(currencyName, new CurrencyResponse(price, Instant.now()));
     }
 
     /**

@@ -1,11 +1,11 @@
-package ru.urfu.controller.menu.constant;
+package ru.urfu.controller.constant;
 
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 /**
- * Стандартизирует названия меню воизбежание опечаток
+ * Тип меню
  */
-public enum MenuTypes {
+public enum MenuType {
 
     /**
      * Главное меню
@@ -20,7 +20,7 @@ public enum MenuTypes {
     /**
      * Меню конкретной валюты с кнопкой для добавления в "отслеживаемые"
      */
-    CURRENCY_ADD_TO_TRACK("CATT",""),
+    CURRENCY_ADD_TO_TRACK("CATT",null),
 
     /**
      * Меню со списком всех отслеживаемых валют
@@ -30,7 +30,7 @@ public enum MenuTypes {
     /**
      * Меню конкретной отслеживаемой валюты с кнопкой для обновления курса стоимости
      */
-    TRACKED_CURRENCY("TC",""),
+    TRACKED_CURRENCY("TC",null),
 
     /**
      * Меню со списком всех поддерживаемых API
@@ -40,27 +40,27 @@ public enum MenuTypes {
     /**
      * Меню с описанием конкретного API
      */
-    API("A","");
+    API("A",null);
 
     /**
      * Уникальное сокращение названия меню,
      * во избежание превышения допустимого размера
      * {@link CallbackQuery#getData}
      */
-    private final String name;
+    private final String menuName;
 
     /**
      * Текст меню
      */
     private final String text;
 
-    MenuTypes(String name, String text) {
-        this.name = name;
+    MenuType(String menuName, String text) {
+        this.menuName = menuName;
         this.text = text;
     }
 
-    public String getName() {
-        return name;
+    public String getMenuName() {
+        return menuName;
     }
 
     public String getText() {

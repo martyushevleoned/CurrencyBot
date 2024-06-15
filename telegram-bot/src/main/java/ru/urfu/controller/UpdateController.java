@@ -3,24 +3,22 @@ package ru.urfu.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.urfu.TelegramBot;
-import ru.urfu.controller.menu.menus.MainMenu;
-import ru.urfu.controller.menu.menus.apiMenu.ApiListMenu;
-import ru.urfu.controller.menu.menus.apiMenu.ApiMenu;
-import ru.urfu.controller.menu.menus.currencyMenu.CurrencyListMenu;
-import ru.urfu.controller.menu.menus.currencyMenu.CurrencyMenu;
-import ru.urfu.controller.menu.menus.trackedCurrencyMenu.TrackedCurrencyListMenu;
-import ru.urfu.controller.menu.menus.trackedCurrencyMenu.TrackedCurrencyMenu;
+import ru.urfu.controller.constant.MenuType;
 import ru.urfu.controller.menu.CallbackMenu;
-import ru.urfu.controller.menu.Menu;
-import ru.urfu.controller.menu.SendMenu;
+import ru.urfu.controller.menu.CommandMenu;
+import ru.urfu.utils.callback.menuCallback.MenuCallback;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Компонент для обработки обновления бота
@@ -28,84 +26,58 @@ import java.util.List;
 @Component
 public class UpdateController {
 
-    private final static Logger LOG = LoggerFactory.getLogger(UpdateController.class);
-    private TelegramBot bot;
-    private final List<Menu> menus;
+    private final Logger LOG = LoggerFactory.getLogger(UpdateController.class);
+    /**
+     * Коллекция сопоставляющая текстовые команды (например /start) и класс для обработки данной команды
+     */
+    private final Map<String, CommandMenu> commandMenuMap;
+    /**
+     * Коллекция сопоставляющая {@link MenuType#getMenuName название меню} и класс для обработки {@link Update обновлений} данного меню
+     */
+    private final Map<String, CallbackMenu> callbackMenuMap;
+    private final AbsSender sender;
 
     @Autowired
-    public UpdateController(MainMenu mainMenu,
-                            CurrencyListMenu currencyListMenu,
-                            CurrencyMenu currencyMenu,
-                            TrackedCurrencyListMenu trackedCurrencyListMenu,
-                            TrackedCurrencyMenu trackedCurrencyMenu,
-                            ApiListMenu apiListMenu,
-                            ApiMenu apiMenu) {
-        menus = List.of(
-                mainMenu,
-                currencyListMenu,
-                currencyMenu,
-                trackedCurrencyListMenu,
-                trackedCurrencyMenu,
-                apiListMenu,
-                apiMenu
-        );
+    public UpdateController(List<CommandMenu> commandMenus, List<CallbackMenu> callbackMenus, @Lazy AbsSender sender) {
+        commandMenuMap = commandMenus.stream().collect(Collectors.toUnmodifiableMap(commandMenu -> commandMenu.getUserCommand().getCommand(), Function.identity()));
+        callbackMenuMap = callbackMenus.stream().collect(Collectors.toUnmodifiableMap(callbackMenu -> callbackMenu.getMenuType().getMenuName(), Function.identity()));
+        this.sender = sender;
     }
 
     /**
-     * Инициализировать Telegram bot.<br>
-     * <b>Вызывается единожды при инициализации.</b>
-     */
-    public void registerTelegramBot(TelegramBot telegramBot) {
-        this.bot = telegramBot;
-    }
-
-    /**
-     * Обработать обновления
+     * Обработать обновление
      */
     public void processUpdate(Update update) {
 
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            processMessage(update.getMessage());
-
-        } else if (update.hasCallbackQuery()) {
-            processCallback(update.getCallbackQuery());
+        try {
+            if (update.hasMessage() && update.getMessage().hasText()) {
+                processMessage(update.getMessage());
+            } else if (update.hasCallbackQuery()) {
+                processCallback(update.getCallbackQuery());
+            }
+        } catch (TelegramApiException e) {
+            LOG.error("Ошибка отправки сообщения", e);
         }
+
     }
 
     /**
      * Обработать текстовые сообщения
      */
-    private void processMessage(Message message) {
-
-        for (Menu menu : menus) {
-            if (menu instanceof SendMenu sendMenu) {
-                if (sendMenu.matchSendMessage(message)) {
-                    try {
-                        bot.execute(sendMenu.formSendMessage(message));
-                    } catch (TelegramApiException e) {
-                        LOG.error(e.getMessage());
-                    }
-                    break;
-                }
-            }
-        }
+    private void processMessage(Message message) throws TelegramApiException {
+        if (commandMenuMap.containsKey(message.getText()))
+            sender.execute(commandMenuMap.get(message.getText()).formSendMessage(message.getChatId()));
     }
 
     /**
      * Обработать нажатия на кнопки
      */
-    private void processCallback(CallbackQuery callbackQuery) {
-        for (Menu menu : menus) {
-            if (menu instanceof CallbackMenu callbackMenu){
-                if (callbackMenu.matchEditMessage(callbackQuery)) {
-                    try {
-                        bot.execute(callbackMenu.formEditMessage(callbackQuery));
-                    } catch (TelegramApiException e) {
-                        LOG.error(e.getMessage());
-                    }
-                    break;
-                }
-            }
-        }
+    private void processCallback(CallbackQuery callbackQuery) throws TelegramApiException {
+        MenuCallback menuCallback = new MenuCallback(callbackQuery);
+        if (callbackMenuMap.containsKey(menuCallback.getMenuName()))
+            sender.execute(callbackMenuMap.get(menuCallback.getMenuName()).formEditMessage(
+                    callbackQuery.getMessage().getChatId(),
+                    callbackQuery.getMessage().getMessageId(),
+                    menuCallback));
     }
 }
